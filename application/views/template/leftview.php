@@ -8,6 +8,52 @@
                 <!-- END SIDEBAR TOGGLER BUTTON -->
             </li>
 
+                        <li class="start <?php if ($category == 0) echo 'active open';?>">
+
+                <a href="javascript:;">
+
+                    <i class="icon-home"></i>
+                    <span class="title">Dashboard</span>
+                    <?php if($category == 0) echo '<span class="selected">';?></span>
+                    <span <?php if($category == 0 ) echo 'class="arrow open"'; else echo 'class = "arrow"';?>></span>
+
+                </a>
+
+                <ul class="sub-menu">
+
+                    <li  <?php if($category == 0 && $sub_category == 0) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/dashboard/summary">
+                            Summary</a>
+                    </li>
+
+                    <li  <?php if($category == 0 && $sub_category == 1) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/dashboard/tableone">
+                            Table1</a>
+                    </li>
+
+                    <li <?php if($category == 0 && $sub_category == 2) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/dashboard/tabletwo">
+                            Table2</a>
+                    </li>
+
+                    <li <?php if($category == 0 && $sub_category == 3) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/dashboard/tablethree">
+                            Table3</a>
+                    </li>
+
+                    <li <?php if($category == 0 && $sub_category == 4) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/dashboard/tablefour">
+                            Table4</a>
+                    </li>
+
+                    <li <?php if($category == 0 && $sub_category == 5) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/dashboard/tablefive">
+                            Table5</a>
+                    </li>
+
+                </ul>
+            </li>
+
             <li class="start <?php if ($category == 0) echo 'active open';?>">
 
                 <a href="javascript:;">
