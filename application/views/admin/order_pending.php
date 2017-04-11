@@ -66,7 +66,7 @@
 
     function ajaxpost()
     {
-        $.ajax({
+         $.ajax({
             type: "POST",
             url: "<?php echo base_url("admin/order/pending_API"); ?>",
             data: {data : ""},
@@ -96,6 +96,9 @@
                         ]
                     );
                 });
+
+                setTimeout(ajaxpost, 5000);
+
             }
         });
     };
