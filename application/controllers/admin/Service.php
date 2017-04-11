@@ -13,7 +13,7 @@ class Service extends CI_Controller {
             $data_header['page'] = 'service';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;	//Category manage page selected.
+            $data_left['category'] = 1;	//Category manage page selected.
             $data_left['sub_category'] = 1;	//Sub Category manage page selected.
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -35,7 +35,7 @@ class Service extends CI_Controller {
         $data_header['page'] = 'serviceview';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 0;
+        $data_left['category'] = 1;
         $data_left['sub_category'] = 1;
         $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -58,7 +58,7 @@ class Service extends CI_Controller {
             $data_header['page'] = 'service';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;	//Category manage page selected.
+            $data_left['category'] = 1;	//Category manage page selected.
             $data_left['sub_category'] = 1;	//Sub Category manage page selected.
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -125,7 +125,7 @@ class Service extends CI_Controller {
             $data_header['page'] = 'service_edit';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;
+            $data_left['category'] = 1;
             $data_left['sub_category'] = 1;
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -158,7 +158,7 @@ class Service extends CI_Controller {
                 $data_header['admin'] = $admin;
                 $data_header['page'] = 'customer_edit';
                 $this->load->view('template/headerview', $data_header);
-                $data_left['category'] = 0;
+                $data_left['category'] = 1;
                 $data_left['sub_category'] = 0;
                 $left_view = $this->load->view('template/leftview',$data_left, true);
                 $data['leftview'] = $left_view;
@@ -174,7 +174,7 @@ class Service extends CI_Controller {
             $data_header['page'] = 'customer_edit';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;
+            $data_left['category'] = 1;
             $data_left['sub_category'] = 0;
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -208,7 +208,7 @@ class Service extends CI_Controller {
                 $data_header['admin'] = $admin;
                 $data_header['page'] = 'service_create';
                 $this->load->view('template/headerview', $data_header);
-                $data_left['category'] = 0;
+                $data_left['category'] = 1;
                 $data_left['sub_category'] = 1;
                 $left_view = $this->load->view('template/leftview',$data_left, true);
                 $data['leftview'] = $left_view;
@@ -221,7 +221,7 @@ class Service extends CI_Controller {
             $data_header['admin'] = $admin;
             $data_header['page'] = 'service_create';
             $this->load->view('template/headerview', $data_header);
-            $data_left['category'] = 0;
+            $data_left['category'] = 1;
             $data_left['sub_category'] = 1;
             $left_view = $this->load->view('template/leftview',$data_left, true);
             $data['leftview'] = $left_view;
