@@ -244,7 +244,7 @@
 
 
 
-                //setTimeout(ajaxpost, 1000);
+                setTimeout(ajaxpost, 5000);
             }
         });
     };
