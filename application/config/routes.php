@@ -117,7 +117,7 @@ $route['admin/customer/search/(:any)'] = 'admin/customers/search/$1';
 $route['admin/customer/edit/(:any)'] = 'admin/customers/edit/$1';
 $route['admin/customer/password/(:any)'] = 'admin/customers/change_password/$1';
 $route['admin/customer/create'] = 'admin/customers/create';
-$route['admin/dashboard'] = 'admin/customers';
+$route['admin/dashboard'] = 'admin/dashboard';
 $route['admin/logout'] = 'admin/login/logout';
 $route['admin'] = 'admin/login';
 
