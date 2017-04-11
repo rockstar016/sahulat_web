@@ -1,40 +1,143 @@
+<script src="<?php echo base_url();?>assets/global/plugins/jquery.min.js" type="text/javascript"></script>
+
+<script type="text/javascript" charset="utf-8">
+
+    $(document).ready(function() {
+        ajaxpost();
+        var table = $('#order_pend_table').DataTable( {
+            "lengthMenu": [
+                [5, 15, 20, -1],
+                [5, 15, 20, "All"] // change per page values here
+            ],
+            "columns": [
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false,
+                    "visible":false
+                },
+                {
+                    "orderable": false
+                }
+            ],
+            "columnDefs": [ {
+                "targets": -1,
+                "data": null,
+                "defaultContent":
+                    '<button class="btn btn-small green-jungle" id="edit_btn" type="button">Edit</button><button class="btn btn-small red-sunglo" id="assign_btn"  type="button">Assign</button>'
+
+
+            } ]
+
+        } );
+        $('#order_pend_table tbody').on( 'click', 'button', function (e) {
+            if(this.id == "edit_btn")
+            {
+                var data = table.row( $(this).parents('tr') ).data();
+                window.location.assign("<?php echo base_url();?>admin/order/edit_order/"+data[ 6 ]);
+
+            }
+            if(this.id == "assign_btn")
+            {
+                var data = table.row( $(this).parents('tr') ).data();
+                window.location.assign("<?php echo base_url();?>admin/order/assign_order/"+data[ 6 ]);
+
+            }
+
+        } );
+
+    });
+
+    function ajaxpost()
+    {
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url("admin/order/pending_API"); ?>",
+            data: {data : ""},
+            cache: false,
+            success: function(result){
+                var table = $('#order_pend_table').dataTable();
+                table.fnClearTable();
+
+                data = JSON.parse(result);
+                var no = 0;
+                $.each(data, function(index, data) {
+                    no++;
+                    var serviceman = "";
+
+                    if( typeof(data.service[0])!= 'undefined'){
+                        serviceman =  data.service[0]['user_name']+"("+data.service[0]['user_phone']+")";
+                    }
+                    //!!!--Here is the main catch------>fnAddData
+                    table.fnAddData( [
+                            no,
+                            data.client[0]['user_name'],
+                            serviceman,
+                            data.created_at,
+                            data.updated_at,
+                            data.order_date,
+                            data.id
+                        ]
+                    );
+                });
+            }
+        });
+    };
+
+</script>
 
 <!-- END HEADER -->
 <div class="clearfix">
 </div>
 <!-- BEGIN CONTAINER -->
 <div class="page-container">
-	<!-- BEGIN SIDEBAR -->
+    <!-- BEGIN SIDEBAR -->
     <?php echo $leftview;?>
-	<!-- END SIDEBAR -->
-	<!-- BEGIN CONTENT -->
-	<div class="page-content-wrapper">
-		<div class="page-content">
-			<!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
-			<!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+    <!-- END SIDEBAR -->
+    <!-- BEGIN CONTENT -->
+    <div class="page-content-wrapper">
+        <div class="page-content">
+            <!-- BEGIN SAMPLE PORTLET CONFIGURATION MODAL FORM-->
+            <!-- END SAMPLE PORTLET CONFIGURATION MODAL FORM-->
 
-			<!-- BEGIN PAGE HEADER-->
-			<h3 class="page-title">
-			    New Orders
-			</h3>
-			<div class="page-bar">
-				<ul class="page-breadcrumb">
-					<li>
-						<i class="fa fa-home"></i>
-						<a href="<?php echo base_url()?>admin/order/pending">Home</a>
-						<i class="fa fa-angle-right"></i>
-					</li>
-					<li>
-						<a href="">Order</a>
-					</li>
+            <!-- BEGIN PAGE HEADER-->
+            <h3 class="page-title">
+                New Orders
+            </h3>
+            <div class="page-bar">
+                <ul class="page-breadcrumb">
+                    <li>
+                        <i class="fa fa-home"></i>
+                        <a href="<?php echo base_url()?>admin/order/pending">Home</a>
+                        <i class="fa fa-angle-right"></i>
+                    </li>
+                    <li>
+                        <a href="">Order</a>
+                    </li>
 
-				</ul>
-				<div class="page-toolbar">
+                </ul>
+                <div class="page-toolbar">
 
-				</div>
-			</div>
-			<!-- END PAGE HEADER-->
-              <!-- begin pending -->
+                </div>
+            </div>
+            <!-- END PAGE HEADER-->
+            <!-- begin pending -->
             <div class="row">
                 <div class="portlet box red-sunglo">
                     <div class="portlet-title">
@@ -51,10 +154,8 @@
                     <div class="portlet-body">
                         <!--Begin Search and filters-->
                         <div class="table-toolbar">
-
                         </div>
-
-                        <table class="col-sm-12 table table-condensed" id="order_pending_table">
+                        <table class="col-sm-12 table table-condensed" id="order_pend_table">
                             <thead>
                             <tr>
                                 <th>
@@ -84,43 +185,16 @@
                                 </th>
                             </tr>
                             </thead>
-                            <tbody>
-
-                                <?php for($i = 0 ; $i < count($pending); $i++):?>
-                                    <tr class="odd gradeX">
-                                        <td><?php echo $i+1;?></td>
-                                        <td><?php echo $pending[$i]['client'][0]['user_name'];?>&nbsp;
-                                            (<?php echo $pending[$i]['client'][0]['user_phone'];?>)
-                                        </td>
-
-                                        <td><?php
-                                            if(isset($pending[$i]['service'][0]['user_name'])){
-                                                echo $pending[$i]['service'][0]['user_name']." "."(".$pending[$i]['service'][0]['user_phone'].")";
-                                            }
-                                            else{
-                                                echo "";
-                                            }?></td>
-                                        <td><?php echo $pending[$i]['created_at'];?></td>
-                                        <td><?php echo $pending[$i]['updated_at'];?></td>
-                                        <td><?php echo $pending[$i]['order_date'];?></td>
-                                        <td><a href="<?php echo base_url();?>admin/order/edit_order/<?php echo $pending[$i]['id']?>" class="btn btn-small green-jungle">Edit</a></td>
-                                        <td><a href="<?php echo base_url();?>admin/order/assign_order/<?php echo $pending[$i]['id']?>" class="btn btn-small red-sunglo">Assign</a></td>
-                                    </tr>
-                                <?php endfor;?>
-                            </tbody>
                         </table>
                     </div>
                 </div>
             </div>
             <!-- end pending -->
+        </div>
+    </div>
+    <!-- END CONTENT -->
 
-
-
-		</div>
-	</div>
-	<!-- END CONTENT -->
-
-	<!-- END QUICK SIDEBAR -->
+    <!-- END QUICK SIDEBAR -->
 </div>
 <!-- END CONTAINER -->
 <!-- BEGIN FOOTER -->
