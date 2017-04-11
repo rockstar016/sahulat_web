@@ -14,7 +14,7 @@ class Order extends CI_Controller {
         $data_header['page'] = 'order';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 1;	//Category manage page selected.
+        $data_left['category'] = 2;	//Category manage page selected.
         $data_left['sub_category'] = 0;	//Sub Category manage page selected.
         $data_header['admin'] = $admin;
         $this->load->view('template/headerview', $data_header);
@@ -45,7 +45,7 @@ class Order extends CI_Controller {
         $data['accept'] = $accept_array;
 
         $complete_array = $this->order_model->getOrdersForList(2);
-        for($i = 0; $i < count($pending_array); $i++){
+        for($i = 0; $i < count($complete_array); $i++){
             $client_id = $complete_array[$i]['client_id'];
             $client_data = $this->client_model->get_client($client_id);
             $complete_array[$i]['client'] = $client_data;
@@ -72,7 +72,7 @@ class Order extends CI_Controller {
         $data_header['page'] = 'orderview';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 1;	//Category manage page selected.
+        $data_left['category'] = 2;	//Category manage page selected.
         $data_left['sub_category'] = 0;	//Sub Category manage page selected.
         $data_header['admin'] = $admin;
         $this->load->view('template/headerview', $data_header);
@@ -135,7 +135,7 @@ class Order extends CI_Controller {
             $data_header['page'] = 'order';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 1;    //Category manage page selected.
+            $data_left['category'] = 2;    //Category manage page selected.
             $data_left['sub_category'] = 0;    //Sub Category manage page selected.
             $data_header['admin'] = $admin;
             $this->load->view('template/headerview', $data_header);
@@ -146,6 +146,7 @@ class Order extends CI_Controller {
     }
 
     public function pending(){
+
         if($this->session->has_userdata('logged_in') == false){
             redirect('admin/');
         }
@@ -155,13 +156,14 @@ class Order extends CI_Controller {
         $data_header['page'] = 'order';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 1;	//Category manage page selected.
+        $data_left['category'] = 2;	//Category manage page selected.
         $data_left['sub_category'] = 1;	//Sub Category manage page selected.
         $data_header['admin'] = $admin;
         $this->load->view('template/headerview', $data_header);
         $left_view = $this->load->view('template/leftview',$data_left, true);
         $data['leftview'] = $left_view;
         $pending_array = $this->order_model->getOrdersForList(0);
+
         for($i = 0; $i < count($pending_array); $i++){
             $client_id = $pending_array[$i]['client_id'];
             $client_data = $this->client_model->get_client($client_id);
@@ -171,9 +173,29 @@ class Order extends CI_Controller {
             $service_data = $this->client_model->get_client($service_id);
             $pending_array[$i]['service'] = $service_data;
         }
-        $data['pending'] = $pending_array;
 
+        $data['pending'] = $pending_array;
         $this->load->view('admin/order_pending', $data);
+
+    }
+
+    public function pending_API(){
+
+        $pending_array = $this->order_model->getOrdersForList(0);
+
+        for($i = 0; $i < count($pending_array); $i++){
+            $client_id = $pending_array[$i]['client_id'];
+            $client_data = $this->client_model->get_client($client_id);
+            $pending_array[$i]['client'] = $client_data;
+
+            $service_id = $pending_array[$i]['service_id'];
+            $service_data = $this->client_model->get_client($service_id);
+            $pending_array[$i]['service'] = $service_data;
+
+        }
+
+        echo json_encode($pending_array);
+
     }
 
     public function show_accept(){
@@ -186,7 +208,7 @@ class Order extends CI_Controller {
         $data_header['page'] = 'order';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 1;	//Category manage page selected.
+        $data_left['category'] = 2;	//Category manage page selected.
         $data_left['sub_category'] = 2;	//Sub Category manage page selected.
         $data_header['admin'] = $admin;
         $this->load->view('template/headerview', $data_header);
@@ -217,7 +239,7 @@ class Order extends CI_Controller {
         $data_header['page'] = 'order';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 1;	//Category manage page selected.
+        $data_left['category'] = 2;	//Category manage page selected.
         $data_left['sub_category'] = 3;	//Sub Category manage page selected.
         $data_header['admin'] = $admin;
         $this->load->view('template/headerview', $data_header);
@@ -248,7 +270,7 @@ class Order extends CI_Controller {
         $data_header['page'] = 'order';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 1;    //Category manage page selected.
+        $data_left['category'] = 2;    //Category manage page selected.
         $data_left['sub_category'] = 1;    //Sub Category manage page selected.
         $data_header['admin'] = $admin;
         $this->load->view('template/headerview', $data_header);
@@ -266,7 +288,7 @@ class Order extends CI_Controller {
     /***
      * assign service to team member
      *
-    ***/
+     ***/
     public function assign_order_api(){
 
         if($this->session->has_userdata('logged_in') == false){
@@ -323,7 +345,7 @@ class Order extends CI_Controller {
             $data_header['page'] = 'order';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 1;    //Category manage page selected.
+            $data_left['category'] = 2;    //Category manage page selected.
             $data_left['sub_category'] = 1;    //Sub Category manage page selected.
             $data_header['admin'] = $admin;
             $this->load->view('template/headerview', $data_header);
