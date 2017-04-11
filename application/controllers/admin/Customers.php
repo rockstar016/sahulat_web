@@ -4,7 +4,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Customers extends CI_Controller {
 
     public function index() {
-
         if($this->session->has_userdata('logged_in') == false){
             redirect('admin/');
         }
@@ -14,7 +13,7 @@ class Customers extends CI_Controller {
             $data_header['page'] = 'customers';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;	//Category manage page selected.
+            $data_left['category'] = 1;	//Category manage page selected.
             $data_left['sub_category'] = 0;	//Sub Category manage page selected.
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -36,7 +35,7 @@ class Customers extends CI_Controller {
             $data_header['page'] = 'customers';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;	//Category manage page selected.
+            $data_left['category'] = 1;	//Category manage page selected.
             $data_left['sub_category'] = 0;	//Sub Category manage page selected.
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -61,7 +60,7 @@ class Customers extends CI_Controller {
         $data_header['page'] = 'customerview';
         $this->load->view('template/headerview', $data_header);
 
-        $data_left['category'] = 0;
+        $data_left['category'] = 1;
         $data_left['sub_category'] = 0;
         $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -91,13 +90,14 @@ class Customers extends CI_Controller {
             $this->client_model->updateUserInformation($id, $name, $phone, $email);
             redirect('admin/customer');
         }
+
         else{
             $admin = $this->session->userdata['master'];
             $data_header['admin'] = $admin;
             $data_header['page'] = 'customer_edit';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;
+            $data_left['category'] = 1;
             $data_left['sub_category'] = 0;
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -130,7 +130,7 @@ class Customers extends CI_Controller {
                 $data_header['admin'] = $admin;
                 $data_header['page'] = 'customer_edit';
                 $this->load->view('template/headerview', $data_header);
-                $data_left['category'] = 0;
+                $data_left['category'] = 1;
                 $data_left['sub_category'] = 0;
                 $left_view = $this->load->view('template/leftview',$data_left, true);
                 $data['leftview'] = $left_view;
@@ -146,7 +146,7 @@ class Customers extends CI_Controller {
             $data_header['page'] = 'customer_edit';
             $this->load->view('template/headerview', $data_header);
 
-            $data_left['category'] = 0;
+            $data_left['category'] = 1;
             $data_left['sub_category'] = 0;
             $left_view = $this->load->view('template/leftview',$data_left, true);
 
@@ -184,7 +184,7 @@ class Customers extends CI_Controller {
                 $data_header['admin'] = $admin;
                 $data_header['page'] = 'customer_create';
                 $this->load->view('template/headerview', $data_header);
-                $data_left['category'] = 0;
+                $data_left['category'] = 1;
                 $data_left['sub_category'] = 0;
                 $left_view = $this->load->view('template/leftview',$data_left, true);
                 $data['leftview'] = $left_view;
@@ -197,7 +197,7 @@ class Customers extends CI_Controller {
             $data_header['admin'] = $admin;
             $data_header['page'] = 'customer_create';
             $this->load->view('template/headerview', $data_header);
-            $data_left['category'] = 0;
+            $data_left['category'] = 1;
             $data_left['sub_category'] = 0;
             $left_view = $this->load->view('template/leftview',$data_left, true);
             $data['leftview'] = $left_view;
