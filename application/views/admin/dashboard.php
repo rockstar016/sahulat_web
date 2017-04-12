@@ -17,7 +17,7 @@
             lng: "20"
         });
         ajaxgetdata();
-
+        ajaxgetsummary();
 
         $('#table_1').DataTable( {
             "lengthMenu": [
@@ -120,7 +120,7 @@
                 }
             ]
         } );
-          $('#table_5').DataTable( {
+        $('#table_5').DataTable( {
             "lengthMenu": [
                 [5, 15, 20, -1],
                 [5, 15, 20, "All"] // change per page values here
@@ -264,7 +264,7 @@
 
     function ajaxgetdata()
     {
-         $.ajax({
+        $.ajax({
             type: "POST",
             url: "<?php echo base_url("admin/Dashboard/GetPosData"); ?>",
             data: {data : ""},
@@ -277,6 +277,28 @@
             }
         });
     };
+
+    function ajaxgetsummary()
+    {
+        $.ajax({
+            type:"POST",
+            url:"<?php echo base_url("admin/Dashboard/GetIntegratedSummary");?>",
+            data:{data:""},
+            cache:false,
+            success: function(result){
+                var ppp = JSON.parse(result);
+                document.getElementById("noClientReg").innerHTML = ppp.noClientReg;
+                document.getElementById("noCompleteOrder").innerHTML = ppp.noCompleteOrder;
+                document.getElementById("noPendingOrder").innerHTML = ppp.noPendingOrder;
+                document.getElementById("noClientOrder").innerHTML = ppp.noClientOrder;
+                document.getElementById("noProcessedOrder").innerHTML = ppp.noProcessedOrder;
+                setTimeout(ajaxgetsummary, 5000);
+
+            }
+        });
+
+    };
+
 
 
     var dashboard_map = function () {
@@ -302,7 +324,7 @@
         map.setZoom(2);
     }
 
- </script>
+</script>
 
 
 <!-- END HEADER -->
@@ -333,6 +355,115 @@
                 </ul>
             </div>
 
+            <div class ="rows">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-comments"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="noFeedback">
+                                1349
+                            </div>
+                            <div class="desc">
+                                Feedbacks
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat red-intense">
+                        <div class="visual">
+                            <i class="fa fa-bar-chart-o"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="noClientReg">
+                            </div>
+                            <div class="desc">
+                                Client Registration
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-comments"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id = "noClientOrder">
+                                1349
+                            </div>
+                            <div class="desc">
+                                Client Orders
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat red-intense">
+                        <div class="visual">
+                            <i class="fa fa-bar-chart-o"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id ="noPendingOrder">
+                                12,5M$
+                            </div>
+                            <div class="desc">
+                                Pending Orders
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat blue-madison">
+                        <div class="visual">
+                            <i class="fa fa-comments"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id="noProcessedOrder">
+
+                            </div>
+                            <div class="desc">
+                                Processed Orders
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="dashboard-stat red-intense">
+                        <div class="visual">
+                            <i class="fa fa-bar-chart-o"></i>
+                        </div>
+                        <div class="details">
+                            <div class="number" id = "noCompleteOrder">
+                                12,5M$
+                            </div>
+                            <div class="desc">
+                                Completed Orders
+                            </div>
+                        </div>
+                        <a class="more" href="javascript:;">
+                            View more <i class="m-icon-swapright m-icon-white"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
             <!-- BEGIN GOOGLE MAP -->
             <div id="dashboard_map" class="gmaps" data-lat="10" data-lot="43.5212983">
 
@@ -457,8 +588,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
 
             <div >
