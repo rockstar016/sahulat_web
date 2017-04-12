@@ -76,4 +76,24 @@ class Dashboard_model extends CI_Model
         return $result->result_array();
     }
 
+    public function getPosData()
+    {
+        $query = "SELECT * FROM tb_service ORDER BY id DESC;";
+        $result = $this->db->query($query);
+        return $result->result_array();
+
+    }
+
+    public function getServiceNameFromServiceId($nId)
+    {
+        $serviceman_arr = $this->getAllServiceman("");
+        for ($i=0; $i<count($serviceman_arr);$i++)
+        {
+            if($i == $nId)
+            {
+                return $serviceman_arr[$i];
+            }
+        }
+        return "";
+    }
 }
