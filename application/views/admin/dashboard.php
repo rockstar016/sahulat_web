@@ -1,11 +1,23 @@
 <script src="<?php echo base_url();?>assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/media/js/jquery.dataTables.min.js"></script>
 <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
+<script src="https://maps.google.com/maps/api/js?key=<?php echo $this->config->item('google_map_key');?>"></script>
+<script src="<?php echo base_url();?>assets/global/plugins/gmaps/gmaps.js" type="text/javascript"></script>
 
 <script type="text/javascript" charset="utf-8">
 
+    var posArr = [];
+    var map;
+
     $(document).ready(function() {
         ajaxpost();
+        map = new GMaps({
+            el: '#dashboard_map',
+            lat: "30",
+            lng: "20"
+        });
+        ajaxgetdata();
+
 
         $('#table_1').DataTable( {
             "lengthMenu": [
@@ -108,7 +120,7 @@
                 }
             ]
         } );
-        $('#table_5').DataTable( {
+          $('#table_5').DataTable( {
             "lengthMenu": [
                 [5, 15, 20, -1],
                 [5, 15, 20, "All"] // change per page values here
@@ -147,6 +159,7 @@
             ]
         } );
 
+
     });
 
     function ajaxpost()
@@ -157,7 +170,7 @@
             data: {data : ""},
             cache: false,
             success: function(result){
-                 var dataTable_1 = $('#table_1').dataTable();
+                var dataTable_1 = $('#table_1').dataTable();
                 dataTable_1.fnClearTable();
                 data = JSON.parse(result);
                 data = data.tbData1;
@@ -242,14 +255,55 @@
                     );
                 });
 
-
-
                 setTimeout(ajaxpost, 5000);
+
             }
         });
     };
 
-</script>
+
+    function ajaxgetdata()
+    {
+         $.ajax({
+            type: "POST",
+            url: "<?php echo base_url("admin/Dashboard/GetPosData"); ?>",
+            data: {data : ""},
+            cache: false,
+            success: function(result){
+
+                posArr = JSON.parse(result);
+                dashboard_map();
+                setTimeout(ajaxgetdata, 5000);
+            }
+        });
+    };
+
+
+    var dashboard_map = function () {
+
+
+        if(posArr.length < 1) {
+            return;
+        }
+
+        for(var i=0; i<posArr.length; i++)
+        {
+            map.addMarker({
+                lat: posArr[i].lat,
+                lng: posArr[i].log,
+                title: 'Serivceman Position',
+                infoWindow: {
+                    content: "<b>"+posArr[i].servicename+"</b>(<b>"+posArr[i].servicephone+"</b>)"
+                }
+
+            })
+        }
+
+        map.setZoom(2);
+    }
+
+ </script>
+
 
 <!-- END HEADER -->
 <div class="clearfix">
@@ -278,6 +332,12 @@
                     </li>
                 </ul>
             </div>
+
+            <!-- BEGIN GOOGLE MAP -->
+            <div id="dashboard_map" class="gmaps" data-lat="10" data-lot="43.5212983">
+
+            </div>
+            <!-- END GOOGLE MAP-->
             <div >
                 <div class ="portlet box blue-steel">
                     <div class = "portlet-title">
@@ -526,9 +586,7 @@
     </div>
 </div>
 <!-- END FOOTER -->
-
 <!-- END JAVASCRIPTS -->
 </body>
 <!-- END BODY -->
 </html>
-
