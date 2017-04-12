@@ -120,7 +120,7 @@
                 }
             ]
         } );
-        $('#table_5').DataTable( {
+          $('#table_5').DataTable( {
             "lengthMenu": [
                 [5, 15, 20, -1],
                 [5, 15, 20, "All"] // change per page values here
@@ -264,7 +264,7 @@
 
     function ajaxgetdata()
     {
-        $.ajax({
+         $.ajax({
             type: "POST",
             url: "<?php echo base_url("admin/Dashboard/GetPosData"); ?>",
             data: {data : ""},
@@ -280,22 +280,22 @@
 
     function ajaxgetsummary()
     {
-        $.ajax({
-            type:"POST",
-            url:"<?php echo base_url("admin/Dashboard/GetIntegratedSummary");?>",
-            data:{data:""},
-            cache:false,
-            success: function(result){
-                var ppp = JSON.parse(result);
-                document.getElementById("noClientReg").innerHTML = ppp.noClientReg;
-                document.getElementById("noCompleteOrder").innerHTML = ppp.noCompleteOrder;
-                document.getElementById("noPendingOrder").innerHTML = ppp.noPendingOrder;
-                document.getElementById("noClientOrder").innerHTML = ppp.noClientOrder;
-                document.getElementById("noProcessedOrder").innerHTML = ppp.noProcessedOrder;
-                setTimeout(ajaxgetsummary, 5000);
+       $.ajax({
+         type:"POST",
+          url:"<?php echo base_url("admin/Dashboard/GetIntegratedSummary");?>",
+          data:{data:""},
+          cache:false,
+          success: function(result){
+              var ppp = JSON.parse(result);
+              document.getElementById("noClientReg").innerHTML = ppp.noClientReg;
+              document.getElementById("noCompleteOrder").innerHTML = ppp.noCompleteOrder;
+              document.getElementById("noPendingOrder").innerHTML = ppp.noPendingOrder;
+              document.getElementById("noClientOrder").innerHTML = ppp.noClientOrder;
+              document.getElementById("noProcessedOrder").innerHTML = ppp.noProcessedOrder;
+              setTimeout(ajaxgetsummary, 5000);
 
-            }
-        });
+          }
+      });
 
     };
 
@@ -324,7 +324,7 @@
         map.setZoom(2);
     }
 
-</script>
+ </script>
 
 
 <!-- END HEADER -->
@@ -359,7 +359,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat blue-madison">
                         <div class="visual">
-                            <i class="fa fa-comments"></i>
+                            <i class="fa fa-newspaper-o"></i>
                         </div>
                         <div class="details">
                             <div class="number" id="noFeedback">
@@ -377,11 +377,11 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat red-intense">
                         <div class="visual">
-                            <i class="fa fa-bar-chart-o"></i>
+                            <i class="fa fa-user-plus"></i>
                         </div>
                         <div class="details">
                             <div class="number" id="noClientReg">
-                            </div>
+                             </div>
                             <div class="desc">
                                 Client Registration
                             </div>
@@ -394,7 +394,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat blue-madison">
                         <div class="visual">
-                            <i class="fa fa-comments"></i>
+                            <i class="fa fa-book"></i>
                         </div>
                         <div class="details">
                             <div class="number" id = "noClientOrder">
@@ -412,7 +412,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat red-intense">
                         <div class="visual">
-                            <i class="fa fa-bar-chart-o"></i>
+                            <i class="fa fa-tag"></i>
                         </div>
                         <div class="details">
                             <div class="number" id ="noPendingOrder">
@@ -448,7 +448,7 @@
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat red-intense">
                         <div class="visual">
-                            <i class="fa fa-bar-chart-o"></i>
+                            <i class="fa fa-check-circle-o"></i>
                         </div>
                         <div class="details">
                             <div class="number" id = "noCompleteOrder">
@@ -463,7 +463,7 @@
                         </a>
                     </div>
                 </div>
-            </div>
+             </div>
             <!-- BEGIN GOOGLE MAP -->
             <div id="dashboard_map" class="gmaps" data-lat="10" data-lot="43.5212983">
 
