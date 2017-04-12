@@ -96,4 +96,45 @@ class Dashboard_model extends CI_Model
         }
         return "";
     }
+
+    public function getNoClientRegistration()
+    {
+        $query = "SELECT * FROM tb_client";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoClientOrders()
+    {
+        $query = "SELECT * FROM tb_order";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoPendingOrders()
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 0";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoCompletedOrders()
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 2";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoProcessedOrders()
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 1";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoTotalFeedback()
+    {
+
+    }
+
 }
