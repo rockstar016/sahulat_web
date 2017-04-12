@@ -38,6 +38,7 @@ class Dashboard extends CI_Controller {
         $table1 = array("tbData1"=>$tabledata1,"tbData2"=>$tabledata2, "tbData3"=>$tabledata3, "tbData4"=>"","tbData5" => $tabledata5);
 
         $pp = json_encode($table1);
+
         echo $pp;
     }
 
@@ -60,7 +61,7 @@ class Dashboard extends CI_Controller {
                     break;
                 case 1:
                     $status = "Accepted";
-                    break;
+                     break;
                 case 2:
                     $status = "Completed";
                     break;
@@ -87,7 +88,7 @@ class Dashboard extends CI_Controller {
 
         }
 
-        return  $data;
+         return  $data;
 
     }
 
@@ -113,7 +114,7 @@ class Dashboard extends CI_Controller {
             if((strpos($tmpDate,$date) >0))
             {
                 $updatedate = "Today";
-            }
+             }
             else if(strpos($tmpDate,$prevdate) >0)
             {
                 $updatedate = "Yesterday";
@@ -123,7 +124,7 @@ class Dashboard extends CI_Controller {
                 continue;
             }
 
-            $client_id = $model_array[$i]['client_id'];
+             $client_id = $model_array[$i]['client_id'];
             switch ($model_array[$i]['status'])
             {
                 case 0:
@@ -178,7 +179,7 @@ class Dashboard extends CI_Controller {
 
             $model_array[$i]['client'] = $client_data;
             $service_id = $model_array[$i]['service_id'];
-
+            
             $service_data = $this->dashboard_model->get_client($service_id);
             $model_array[$i]['service'] = $service_data;
 
@@ -248,6 +249,29 @@ class Dashboard extends CI_Controller {
         }
 
         return $data;
+    }
+
+    public function GetPosData()
+    {
+
+        $client_arr = $this->dashboard_model->getPosData();
+        $data = array();
+
+        for($clId = 0; $clId < count($client_arr); $clId++)
+        {
+            $pp = $client_arr[$clId];
+            $servicedata= $this->dashboard_model->getServiceNameFromServiceId($pp['service_id']);
+            if($servicedata == "")
+            {
+                continue;
+            }
+            $row_data = array('log' => $pp['service_cur_long'], 'lat'=>$pp['service_cur_lat'], 'servicename' => $servicedata['user_name'], 'servicephone'=>$servicedata['user_phone']);
+            array_push($data,$row_data);
+        }
+
+        $rval = json_encode($data);
+         echo $rval;
+
     }
 
 }
