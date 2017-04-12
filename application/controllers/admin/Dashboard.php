@@ -42,6 +42,26 @@ class Dashboard extends CI_Controller {
         echo $pp;
     }
 
+
+    public function GetIntegratedSummary()
+    {
+        $noClient = $this->dashboard_model->getNoClientRegistration();
+
+        $noClientOrder = $this->dashboard_model->getNoClientOrders();
+
+        $noPendingOrder = $this->dashboard_model->getNoPendingOrders();
+
+        $noCompleteOrder = $this->dashboard_model->getNoCompletedOrders();
+
+        $noProcessedOrder = $this->dashboard_model->getNoProcessedOrders();
+
+        $summary = array("noClientReg"=>$noClient,"noClientOrder"=>$noClientOrder, "noPendingOrder"=>$noPendingOrder, "noCompleteOrder"=>$noCompleteOrder, "noProcessedOrder"=>$noProcessedOrder);
+
+        $pp = json_encode($summary);
+
+        echo $pp;
+    }
+
     public function GetJsonData()
     {
 
@@ -61,7 +81,7 @@ class Dashboard extends CI_Controller {
                     break;
                 case 1:
                     $status = "Accepted";
-                     break;
+                    break;
                 case 2:
                     $status = "Completed";
                     break;
@@ -88,7 +108,7 @@ class Dashboard extends CI_Controller {
 
         }
 
-         return  $data;
+        return  $data;
 
     }
 
@@ -114,7 +134,7 @@ class Dashboard extends CI_Controller {
             if((strpos($tmpDate,$date) >0))
             {
                 $updatedate = "Today";
-             }
+            }
             else if(strpos($tmpDate,$prevdate) >0)
             {
                 $updatedate = "Yesterday";
@@ -124,7 +144,7 @@ class Dashboard extends CI_Controller {
                 continue;
             }
 
-             $client_id = $model_array[$i]['client_id'];
+            $client_id = $model_array[$i]['client_id'];
             switch ($model_array[$i]['status'])
             {
                 case 0:
@@ -179,7 +199,7 @@ class Dashboard extends CI_Controller {
 
             $model_array[$i]['client'] = $client_data;
             $service_id = $model_array[$i]['service_id'];
-            
+
             $service_data = $this->dashboard_model->get_client($service_id);
             $model_array[$i]['service'] = $service_data;
 
@@ -259,18 +279,23 @@ class Dashboard extends CI_Controller {
 
         for($clId = 0; $clId < count($client_arr); $clId++)
         {
+
             $pp = $client_arr[$clId];
             $servicedata= $this->dashboard_model->getServiceNameFromServiceId($pp['service_id']);
+
             if($servicedata == "")
             {
                 continue;
             }
+
             $row_data = array('log' => $pp['service_cur_long'], 'lat'=>$pp['service_cur_lat'], 'servicename' => $servicedata['user_name'], 'servicephone'=>$servicedata['user_phone']);
             array_push($data,$row_data);
+
         }
 
         $rval = json_encode($data);
-         echo $rval;
+
+        echo $rval;
 
     }
 
