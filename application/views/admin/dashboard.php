@@ -3,19 +3,37 @@
 <script type="text/javascript" src="<?php echo base_url();?>assets/global/plugins/datatables/plugins/bootstrap/dataTables.bootstrap.js"></script>
 <script src="https://maps.google.com/maps/api/js?key=<?php echo $this->config->item('google_map_key');?>"></script>
 <script src="<?php echo base_url();?>assets/global/plugins/gmaps/gmaps.js" type="text/javascript"></script>
+<link rel = "stylesheet" type ="text/css" href="<?php echo base_url();?>assets/global/plugins/chartist/chartist.min.css">
+<script src="<?php echo base_url();?>assets/global/plugins/chartist/chartist.js" type="text/javascript"></script>
 
 <script type="text/javascript" charset="utf-8">
-
     var posArr = [];
     var map;
-
+    var mychat;
     $(document).ready(function() {
+
         ajaxpost();
+        var data = {
+            labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
+            series: [
+                [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
+            ]
+        };
+
+        var options = {
+            high: 10,
+            low: 0
+        };
+
+
+
+
         map = new GMaps({
             el: '#dashboard_map',
             lat: "30",
             lng: "20"
         });
+
         ajaxgetdata();
         ajaxgetsummary();
 
@@ -41,7 +59,6 @@
                     "orderable": false
                 }
             ]
-
         } );
         $('#table_2').DataTable( {
             "lengthMenu": [
@@ -65,7 +82,6 @@
                     "orderable": false
                 }
             ]
-
         } );
         $('#table_3').DataTable( {
             "lengthMenu": [
@@ -86,7 +102,6 @@
                     "orderable": false
                 }
             ]
-
         } );
         $('#table_4').DataTable( {
             "lengthMenu": [
@@ -158,6 +173,8 @@
                 }
             ]
         } );
+        ajaxgetVisitNo();
+
 
 
     });
@@ -185,7 +202,6 @@
                         ]
                     );
                 });
-
                 var dataTable_2 = $('#table_2').dataTable();
                 dataTable_2.fnClearTable();
                 data = JSON.parse(result);
@@ -201,8 +217,6 @@
                         ]
                     );
                 });
-
-
                 var dataTable_3 = $('#table_3').dataTable();
                 dataTable_3.fnClearTable();
                 data = JSON.parse(result);
@@ -217,8 +231,6 @@
                         ]
                     );
                 });
-
-
                 var dataTable_4 = $('#table_4').dataTable();
                 dataTable_4.fnClearTable();
                 data = JSON.parse(result);
@@ -233,7 +245,6 @@
                         ]
                     );
                 });
-
                 var dataTable_5 = $('#table_5').dataTable();
                 dataTable_5.fnClearTable();
                 data = JSON.parse(result);
@@ -254,14 +265,10 @@
                         ]
                     );
                 });
-
                 setTimeout(ajaxpost, 5000);
-
             }
         });
     };
-
-
     function ajaxgetdata()
     {
         $.ajax({
@@ -270,14 +277,12 @@
             data: {data : ""},
             cache: false,
             success: function(result){
-
                 posArr = JSON.parse(result);
                 dashboard_map();
                 setTimeout(ajaxgetdata, 5000);
             }
         });
     };
-
     function ajaxgetsummary()
     {
         $.ajax({
@@ -293,21 +298,49 @@
                 document.getElementById("noClientOrder").innerHTML = ppp.noClientOrder;
                 document.getElementById("noProcessedOrder").innerHTML = ppp.noProcessedOrder;
                 setTimeout(ajaxgetsummary, 5000);
+            }
+        });
+    };
+    function ajaxgetVisitNo()
+    {
+        $.ajax({
+            type:"POST",
+            url:"<?php echo base_url("admin/Dashboard/getNoServiceManVisits");?>",
+            data:{data:""},
+            cache:false,
+            success: function(result){
+
+                var ppp = JSON.parse(result);
+
+                var newData_visit = {
+                    labels:ppp.labels,
+                    series: [ppp.series_visit]
+                };
+                var newData_accept = {
+                    labels:ppp.labels,
+                    series: [ppp.series_accepted]
+                };
+                var newData_reject = {
+                    labels:ppp.labels,
+                    series: [ppp.series_rejected]
+                };
+
+                new Chartist.Bar('.ct-chart',newData_visit);
+                new Chartist.Bar('.ct-chart1', newData_accept);
+                new Chartist.Bar('.ct-chart2', newData_reject);
+                setTimeout(ajaxgetVisitNo, 5000);
+
 
             }
         });
 
-    };
-
+    }
 
 
     var dashboard_map = function () {
-
-
         if(posArr.length < 1) {
             return;
         }
-
         for(var i=0; i<posArr.length; i++)
         {
             map.addMarker({
@@ -317,13 +350,10 @@
                 infoWindow: {
                     content: "<b>"+posArr[i].servicename+"</b>(<b>"+posArr[i].servicephone+"</b>)"
                 }
-
             })
         }
-
         map.setZoom(2);
     }
-
 </script>
 
 
@@ -464,7 +494,56 @@
                         </a>
                     </div>
                 </div>
+                <div class="col-md-6 col-sm-6">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-sharp hide"></i>
+                                <span class="caption-subject font-green-sharp bold uppercase">Site Visits</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                            <div class="ct-chart"></div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-sharp hide"></i>
+                                <span class="caption-subject font-green-sharp bold uppercase">Acceptance </span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                            <div class="ct-chart1"></div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <!-- BEGIN PORTLET-->
+                    <div class="portlet light ">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="icon-bar-chart font-green-sharp hide"></i>
+                                <span class="caption-subject font-green-sharp bold uppercase">Reject</span>
+                            </div>
+
+                        </div>
+                        <div class="portlet-body">
+                            <div class="ct-chart2"></div>
+                        </div>
+                    </div>
+                    <!-- END PORTLET-->
+                </div>
             </div>
+
             <!-- BEGIN GOOGLE MAP -->
             <div id="dashboard_map" class="gmaps" data-lat="10" data-lot="43.5212983">
 
