@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Chartist</title>
+    <meta name="viewport" content=""width="device-width, initial-scale=1">
+    <link rel = "stylesheet" type ="text/css" href="chartist.min.css">
+    <style>
+        #chart{
+            height:300px;
+            width:50%
+        }
+    </style>
+</head>
+<body>
+    <div class="ct-chart" id="chart"></div>
+    <script type = "text/javascript" src="chartist.js">
+    </script>
+    <script>
+        var data = {
+            labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'W7', 'W8', 'W9', 'W10'],
+            series: [
+                [1, 2, 4, 8, 6, -2, -1, -4, -6, -2]
+            ]
+        };
+
+        var options = {
+            high: 10,
+            low: -10
+        };
+
+        new Chartist.Bar('.ct-chart', data, options);
+    </script>
+</body>
+</html>
