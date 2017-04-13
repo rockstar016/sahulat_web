@@ -328,8 +328,6 @@
                 new Chartist.Bar('.ct-chart',newData_visit);
                 new Chartist.Bar('.ct-chart1', newData_accept);
                 new Chartist.Bar('.ct-chart2', newData_reject);
-                setTimeout(ajaxgetVisitNo, 5000);
-
 
             }
         });
@@ -368,10 +366,43 @@
     <!-- BEGIN CONTENT -->
     <div class="page-content-wrapper">
         <div class="page-content">
+
+            <div>
+                <table width ="100%">
+                    <tr>
+                        <td>
+                            <h3 class="page-title">
+                                Dashboard
+                            </h3>
+                        </td>
+                        <td align="right" style="padding-right: 2%">
+                            <div >
+                                <img class="avatar" alt=""  width = "80" src="<?php echo base_url() ;?>assets/global/img/FiStar.png">
+                                <b>50 Reviews          </b>
+                            </div>
+                            <div>
+                                <img class="avatar" alt="" width = "80" src="<?php echo base_url();?>assets/global/img/FStar.png">
+                                <b>23 Reviews          </b>
+                            </div>
+                            <div>
+                                <img class="avatar" alt="" width = "80" src="<?php echo base_url();?>assets/global/img/thStar.png">
+                                <b>40 Reviews          </b>
+                            </div>
+                            <div>
+                                <img class="avatar" alt="" width = "80" src="<?php echo base_url();?>assets/global/img/tStar.png">
+                                <b>30 Reviews          </b>
+                            </div>
+                            <div>
+                                <img class="avatar" alt="" width = "80" src="<?php echo base_url();?>assets/global/img/oStar.png">
+                                <b>10 Reviews          </b>
+
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
             <!-- BEGIN PAGE HEADER-->
-            <h3 class="page-title">
-                Dashboard
-            </h3>
+
             <div class="page-bar">
                 <ul class="page-breadcrumb">
                     <li style="margin-top: 8px;">
@@ -440,6 +471,9 @@
                         </a>
                     </div>
                 </div>
+
+
+
                 <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
                     <div class="dashboard-stat red-intense">
                         <div class="visual">
@@ -494,54 +528,60 @@
                         </a>
                     </div>
                 </div>
-                <div class="col-md-6 col-sm-6">
-                    <!-- BEGIN PORTLET-->
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-bar-chart font-green-sharp hide"></i>
-                                <span class="caption-subject font-green-sharp bold uppercase">Site Visits</span>
-                            </div>
 
-                        </div>
-                        <div class="portlet-body">
-                            <div class="ct-chart"></div>
-                        </div>
-                    </div>
-                    <!-- END PORTLET-->
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <!-- BEGIN PORTLET-->
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-bar-chart font-green-sharp hide"></i>
-                                <span class="caption-subject font-green-sharp bold uppercase">Acceptance </span>
-                            </div>
+                <div>
+                    <div class="col-md-6 col-sm-6">
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                                    <span class="caption-subject font-green-sharp bold uppercase">Site Visits</span>
+                                </div>
 
-                        </div>
-                        <div class="portlet-body">
-                            <div class="ct-chart1"></div>
-                        </div>
-                    </div>
-                    <!-- END PORTLET-->
-                </div>
-                <div class="col-md-6 col-sm-6">
-                    <!-- BEGIN PORTLET-->
-                    <div class="portlet light ">
-                        <div class="portlet-title">
-                            <div class="caption">
-                                <i class="icon-bar-chart font-green-sharp hide"></i>
-                                <span class="caption-subject font-green-sharp bold uppercase">Reject</span>
                             </div>
-
+                            <div class="portlet-body">
+                                <div class="ct-chart"></div>
+                            </div>
                         </div>
-                        <div class="portlet-body">
-                            <div class="ct-chart2"></div>
-                        </div>
+                        <!-- END PORTLET-->
                     </div>
-                    <!-- END PORTLET-->
+                    <div class="col-md-6 col-sm-6">
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                                    <span class="caption-subject font-green-sharp bold uppercase">Acceptance </span>
+                                </div>
+
+                            </div>
+                            <div class="portlet-body">
+                                <div class="ct-chart1"></div>
+                            </div>
+                        </div>
+                        <!-- END PORTLET-->
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <!-- BEGIN PORTLET-->
+                        <div class="portlet light ">
+                            <div class="portlet-title">
+                                <div class="caption">
+                                    <i class="icon-bar-chart font-green-sharp hide"></i>
+                                    <span class="caption-subject font-green-sharp bold uppercase">Reject</span>
+                                </div>
+
+                            </div>
+                            <div class="portlet-body">
+                                <div class="ct-chart2"></div>
+                            </div>
+                        </div>
+                        <!-- END PORTLET-->
+                    </div>
                 </div>
+
+
+
             </div>
 
             <!-- BEGIN GOOGLE MAP -->
