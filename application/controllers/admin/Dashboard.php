@@ -1,301 +1,147 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Dashboard extends CI_Controller {
-
-    public function index() {
-        if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
-        }
-        else{
-            $admin = $this->session->userdata['master'];
-            $data_header['admin'] = $admin;
-            $data_header['page'] = 'customers';
-            $this->load->view('template/headerview', $data_header);
-
-            $data_left['category'] = 0;	//Category manage page selected.
-            $data_left['sub_category'] = 0;	//Sub Category manage page selected.
-            $left_view = $this->load->view('template/leftview',$data_left, true);
-
-            $data['leftview'] = $left_view;
-            $user_list = $this->dashboard_model->getAllClient("");
-            $data['userlist'] = $user_list;
-            $data['search'] = "";
-            $this->load->view('admin/dashboard', $data);
-        }
-    }
-
-    public function GetIntegratedData()
+/**
+ * Created by PhpStorm.
+ * User: rock
+ * Date: 3/15/17
+ * Time: 11:27 PM
+ */
+class Dashboard_model extends CI_Model
+{
+    public function __construct()
     {
-        $tabledata1 = $this->GetJsonData();
+        $this->load->database();
+    }
 
-        $tabledata2 = $this->GetJsonDataTableTwo();
+    public function getAllServiceman($name){
+        $query = "SELECT * FROM tb_client WHERE kind = 0";
+        if($name != "")
+            $query .= " AND user_name LIKE '$name%'";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
 
-        $tabledata3 = $this->GetJsonDataTableThree();
-
-        $tabledata5 = $this->GetJsonDataTableFive();
-
-        $table1 = array("tbData1"=>$tabledata1,"tbData2"=>$tabledata2, "tbData3"=>$tabledata3, "tbData4"=>"","tbData5" => $tabledata5);
-
-        $pp = json_encode($table1);
-
-        echo $pp;
+    public function get_client($id){
+        $this->db->where('id',$id);
+        $query = $this->db->get('tb_client');
+        return $query->result_array();
     }
 
 
-    public function GetIntegratedSummary()
+    public function getAllClient($name){
+        $query = "SELECT * FROM tb_client WHERE kind = 1";
+        if($name != "")
+            $query .= " AND user_name LIKE '$name%'";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
+    public function updateUserInformation($id, $name, $phone, $email){
+        $data = array(
+            'user_name' => $name,
+            'user_phone'  => $phone,
+            'user_email'  => $email
+        );
+        $this->db->where('id', $id);
+        $this->db->update('tb_client', $data);
+    }
+
+    public function getNumberJob($status,$servicemanID)
     {
-        $noClient = $this->dashboard_model->getNoClientRegistration();
-
-        $noClientOrder = $this->dashboard_model->getNoClientOrders();
-
-        $noPendingOrder = $this->dashboard_model->getNoPendingOrders();
-
-        $noCompleteOrder = $this->dashboard_model->getNoCompletedOrders();
-
-        $noProcessedOrder = $this->dashboard_model->getNoProcessedOrders();
-
-        $summary = array("noClientReg"=>$noClient,"noClientOrder"=>$noClientOrder, "noPendingOrder"=>$noPendingOrder, "noCompleteOrder"=>$noCompleteOrder, "noProcessedOrder"=>$noProcessedOrder);
-
-        $pp = json_encode($summary);
-
-        echo $pp;
+        $query = "SELECT * FROM tb_order WHERE service_id=".$servicemanID." AND STATUS=".$status;
+        $result = $this->db->query($query);
+        return count($result);
     }
 
-    public function GetJsonData()
+    public function getRating($servicemanID)
     {
+        $query = "SELECT ord_feedback FROM tb_order WHERE service_id=".$servicemanID;
+        $result = $this->db->query($query)->result_array();
+        $avg = 0;
+        $cn = count($result);
 
-        $pending_array = $this->dashboard_model->getOrdersForTable();
-        $totalData = count($pending_array);
-
-        $data = array();
-
-
-        for($i = 0; $i < count($pending_array); $i++){
-
-            $client_id = $pending_array[$i]['client_id'];
-            switch ($pending_array[$i]['status'])
-            {
-                case 0:
-                    $status = "Pending";
-                    break;
-                case 1:
-                    $status = "Accepted";
-                    break;
-                case 2:
-                    $status = "Completed";
-                    break;
-            }
-
-            $client_data = $this->dashboard_model->get_client($client_id);
-            $pending_array[$i]['client'] = $client_data;
-            $service_id = $pending_array[$i]['service_id'];
-            $service_data = $this->dashboard_model->get_client($service_id);
-            $pending_array[$i]['service'] = $service_data;
-
-            $no = $i+1;
-            $username = $client_data[0]['user_name'];
-            $servicename = "";
-
-            if(!empty($pending_array[$i]['service'][0]['user_name']))
-            {
-                $servicename = ($pending_array[$i]['service'][0]['user_name']);
-            }
-
-            $createdAt = $client_data[0]['created_at'];
-            $row_data = array('no' => $no,"created_at" => $createdAt,"State" =>$status, "username" => $username, "servicename" => $servicename);
-            array_push($data,$row_data);
-
-        }
-
-        return  $data;
-
-    }
-
-
-    public function GetJsonDataTableTwo()
-    {
-
-        $date = date("Y-m-d");
-        $prevdate = date("Y-m-d", mktime(0, 0, 0, date("m"),date("d")-1,date("Y")));
-
-
-        $model_array = $this->dashboard_model->getOrdersForTable();
-        $totalData = count($model_array);
-
-        $data = array();
-
-        for($i = 0; $i < count($model_array); $i++){
-
-            $tmpDate = $model_array[$i]['updated_at'];
-
-            $updatedate = "";
-
-            if((strpos($tmpDate,$date) >0))
-            {
-                $updatedate = "Today";
-            }
-            else if(strpos($tmpDate,$prevdate) >0)
-            {
-                $updatedate = "Yesterday";
-            }
-            else
-            {
-                continue;
-            }
-
-            $client_id = $model_array[$i]['client_id'];
-            switch ($model_array[$i]['status'])
-            {
-                case 0:
-                    $status = "Pending";
-                    break;
-                case 1:
-                    $status = "Accepted";
-                    break;
-                case 2:
-                    $status = "Completed";
-                    break;
-            }
-
-            $client_data = $this->dashboard_model->get_client($client_id);
-            $model_array[$i]['client'] = $client_data;
-            $service_id = $model_array[$i]['service_id'];
-            $service_data = $this->dashboard_model->get_client($service_id);
-            $model_array[$i]['service'] = $service_data;
-
-            $no = $i+1;
-            $username = $client_data[0]['user_name'];
-            $servicename = "";
-
-            if(!empty($model_array[$i]['service'][0]['user_name']))
-            {
-                $servicename = ($model_array[$i]['service'][0]['user_name']);
-            }
-
-            $row_data = array('no' => $no,"username" => $username, "servicename" => $servicename,"State" =>$status,"toryes" => $updatedate);
-            array_push($data,$row_data);
-
-        }
-
-        return $data;
-
-    }
-
-    public function GetJsonDataTableThree()
-    {
-
-        $model_array = $this->dashboard_model->getOrdersForTable();
-        $totalData = count($model_array);
-
-        $data = array();
-
-        for($i = 0; $i < count($model_array); $i++){
-
-            $tmpDate = $model_array[$i]['updated_at'];
-
-            $client_id = $model_array[$i]['client_id'];
-            $client_data = $this->dashboard_model->get_client($client_id);
-
-            $model_array[$i]['client'] = $client_data;
-            $service_id = $model_array[$i]['service_id'];
-
-            $service_data = $this->dashboard_model->get_client($service_id);
-            $model_array[$i]['service'] = $service_data;
-
-            $no = $i+1;
-            $username = $client_data[0]['user_name'];
-            $servicename = "";
-
-            if(!empty($model_array[$i]['service'][0]['user_name']))
-            {
-                $servicename = ($model_array[$i]['service'][0]['user_name']);
-            }
-            $orderdate =  $model_array[$i]['order_date'];
-            $row_data = array('no' => $no,"username" => $username, "created_date" => $servicename,"order_date" =>$orderdate);
-            array_push($data,$row_data);
-
-        }
-
-        return $data;
-
-    }
-
-    public function GetJsonDataTableFour(){
-        $client_arr = $this->dashboard_model->getAllServiceman("");
-        $data = array();
-
-        for($clId = 0; $clId < count($client_arr); $clId++)
+        for($i=0; $i<$cn; $i++)
         {
-            $pp = $client_arr[$clId];
-            $servicename  = $pp['user_name'];
-            $phonenumber =  $client_arr[$clId]['user_phone'];
-            $servicemanID = $clId;
-            $jobAssigned = $this->dashboard_model->getNumberJob($clId,0);
-            $JobProcessedNumber = $this->dashboard_model->getNumberJob($clId,1);
-            $JobCompletedNumber = $this ->dashboard_model ->getNumberJob($clId,2);
-            $JobPendingNumber = 0;
-            $AverrespControl = 0;
-            $Averrespclient = 0;
-            $rating = $this->dashboard_model->getRating($servicemanID);
-            $row_data = array('no' => $clId,"servicename" => $servicename, "phonenum" => $phonenumber,"Job_Assign"=>$jobAssigned,"JobProcess"=>$JobProcessedNumber,"JobPend"=>$JobPendingNumber,"AvgRespControl"=>$AverrespControl,"JobComplete"=>$JobCompletedNumber,"AvgrepClient"=>$Averrespclient,"rating"=>$rating);
-            array_push($data,$row_data);
+            $p=(float)($result[$i]['ord_feedback']);
+            $avg += $p /$cn;
         }
 
-        return $data;
+        return $avg;
     }
 
-    public function GetJsonDataTableFive(){
-
-        $client_arr = $this->dashboard_model->getAllServiceman("");
-        $data = array();
-
-        for($clId = 0; $clId < count($client_arr); $clId++)
-        {
-            $pp = $client_arr[$clId];
-            $servicename  = $pp['user_name'];
-            $phonenumber =  $client_arr[$clId]['user_phone'];
-            $servicemanID = $clId;
-            $jobAssigned = $this->dashboard_model->getNumberJob($clId,0);
-            $JobProcessedNumber = $this->dashboard_model->getNumberJob($clId,1);
-            $JobCompletedNumber = $this ->dashboard_model ->getNumberJob($clId,2);
-            $JobPendingNumber = 0;
-            $AverrespControl = 0;
-            $Averrespclient = 0;
-            $rating = $this->dashboard_model->getRating($servicemanID);
-            $row_data = array('no' => $clId,"servicename" => $servicename, "phonenum" => $phonenumber,"Job_Assign"=>$jobAssigned,"JobProcess"=>$JobProcessedNumber,"JobPend"=>$JobPendingNumber,"AvgRespControl"=>$AverrespControl,"JobComplete"=>$JobCompletedNumber,"AvgrepClient"=>$Averrespclient,"rating"=>$rating);
-            array_push($data,$row_data);
-
-        }
-
-        return $data;
-    }
-
-    public function GetPosData()
+    public function getOrdersForTable()
     {
+        $query = "SELECT * FROM tb_order ORDER BY created_at DESC;";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
 
-        $client_arr = $this->dashboard_model->getPosData();
-        $data = array();
+    public function getPosData()
+    {
+        $query = "SELECT * FROM tb_service ORDER BY id DESC;";
+        $result = $this->db->query($query);
+        return $result->result_array();
 
-        for($clId = 0; $clId < count($client_arr); $clId++)
+    }
+
+    public function getServiceNameFromServiceId($nId)
+    {
+        $serviceman_arr = $this->getAllServiceman("");
+        for ($i=0; $i<count($serviceman_arr);$i++)
         {
-
-            $pp = $client_arr[$clId];
-            $servicedata= $this->dashboard_model->getServiceNameFromServiceId($pp['service_id']);
-
-            if($servicedata == "")
+            if($i == $nId)
             {
-                continue;
+                return $serviceman_arr[$i];
             }
-
-            $row_data = array('log' => $pp['service_cur_long'], 'lat'=>$pp['service_cur_lat'], 'servicename' => $servicedata['user_name'], 'servicephone'=>$servicedata['user_phone']);
-            array_push($data,$row_data);
-
         }
+        return "";
+    }
 
-        $rval = json_encode($data);
+    public function getNoClientRegistration()
+    {
+        $query = "SELECT * FROM tb_client";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
 
-        echo $rval;
+    public function getNoClientOrders()
+    {
+        $query = "SELECT * FROM tb_order";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoPendingOrders()
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 0";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoCompletedOrders()
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 2";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getNoProcessedOrders()
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 1";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getAllServiceUsername(){
+        $query = "SELECT user_name FROM tb_client WHERE kind = 0";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
+
+
+    public function getNoTotalFeedback()
+    {
 
     }
 
