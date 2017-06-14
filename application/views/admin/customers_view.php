@@ -18,7 +18,7 @@
                 <ul class="page-breadcrumb">
                     <li style="margin-top: 8px;">
                         <i class="fa fa-home"></i>
-                        <a href="">Home</a>
+                        <a href="<?php echo base_url()?>admin/dashboard">Home</a>
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>

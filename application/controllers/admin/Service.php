@@ -5,7 +5,7 @@ class Service extends CI_Controller {
 
     public function index() {
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         else{
             $admin = $this->session->userdata['master'];
@@ -27,7 +27,7 @@ class Service extends CI_Controller {
 
     public function view($id = 0){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -50,7 +50,7 @@ class Service extends CI_Controller {
 
     public function search($user_name){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         else{
             $admin = $this->session->userdata['master'];
@@ -72,7 +72,7 @@ class Service extends CI_Controller {
 
     public function activeuser($id){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $this->client_model->update_info($id, 4, 1);
         redirect('admin/service');
@@ -82,7 +82,7 @@ class Service extends CI_Controller {
         //$kind = 1: email, 2: phone
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         if($kind == 1){
             $this->client_model->activate_email($id);
@@ -97,7 +97,7 @@ class Service extends CI_Controller {
     public function blockuser($id){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $this->client_model->update_info($id, 4, 0);
         redirect('admin/service');
@@ -106,7 +106,7 @@ class Service extends CI_Controller {
     public function edit($id =0){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('username','UserName','required');
@@ -139,7 +139,7 @@ class Service extends CI_Controller {
 
     public function change_password($id = 0){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('new_pass','Newpassword','required');
@@ -188,7 +188,7 @@ class Service extends CI_Controller {
 
     public function create(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $this->form_validation->set_rules('username','UserName','required');
         $this->form_validation->set_rules('userphone','PhoneNumber','required');
@@ -232,7 +232,7 @@ class Service extends CI_Controller {
 
     public function getposition(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $id = $this->input->post('serv_id');
         $result = $this->serviceman_model->getPosition($id);

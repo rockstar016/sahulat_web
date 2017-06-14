@@ -13,7 +13,7 @@ class Login extends CI_Controller {
             $user_password = $this->input->post('password');
 
             if($this->session->has_userdata['logged_in'] == true && $this->session->userdata('logged_in') == true){
-                redirect('admin/dashboard');
+                redirect('admin');
             }
             else{
                 $login_result = $this->admin_model->login($user_auth, $user_password);
@@ -25,9 +25,10 @@ class Login extends CI_Controller {
 //                        'master_phone' => $login_result['data']->master_phone
                     );
                     $this->session->set_userdata($session_value);
-                    redirect('admin/dashboard');
+                    redirect('admin');
                 }
                 else{
+
                     $data = array();
                     $data['error'] = true;
                     $this->load->view('login/admin_login',$data);
@@ -35,6 +36,7 @@ class Login extends CI_Controller {
             }
         }
         else{
+
             $data = array();
             $data['error'] = false;
             $this->load->view('login/admin_login', $data);

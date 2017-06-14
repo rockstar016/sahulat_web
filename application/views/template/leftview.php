@@ -16,9 +16,7 @@
                     <span class="title">Dashboard</span>
                     <?php if($category == 0) echo '<span class="selected">';?></span>
                     <span <?php if($category == 0 ) echo 'class="arrow open"'; else echo 'class = "arrow"';?>></span>
-
                 </a>
-
             </li>
 
 

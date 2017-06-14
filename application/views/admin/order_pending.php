@@ -1,109 +1,6 @@
 <script src="<?php echo base_url();?>assets/global/plugins/jquery.min.js" type="text/javascript"></script>
 
-<script type="text/javascript" charset="utf-8">
 
-    $(document).ready(function() {
-        ajaxpost();
-        var table = $('#order_pend_table').DataTable( {
-            "lengthMenu": [
-                [5, 15, 20, -1],
-                [5, 15, 20, "All"] // change per page values here
-            ],
-            "columns": [
-                {
-                    "orderable": false
-                },
-                {
-                    "orderable": false
-                },
-                {
-                    "orderable": false
-                },
-                {
-                    "orderable": false
-                },
-                {
-                    "orderable": false
-                },
-                {
-                    "orderable": false
-                },
-                {
-                    "orderable": false,
-                    "visible":false
-                },
-                {
-                    "orderable": false
-                }
-            ],
-            "columnDefs": [ {
-                "targets": -1,
-                "data": null,
-                "defaultContent":
-                    '<button class="btn btn-small green-jungle" id="edit_btn" type="button">Edit</button><button class="btn btn-small red-sunglo" id="assign_btn"  type="button">Assign</button>'
-
-
-            } ]
-
-        } );
-        $('#order_pend_table tbody').on( 'click', 'button', function (e) {
-            if(this.id == "edit_btn")
-            {
-                var data = table.row( $(this).parents('tr') ).data();
-                window.location.assign("<?php echo base_url();?>admin/order/edit_order/"+data[ 6 ]);
-
-            }
-            if(this.id == "assign_btn")
-            {
-                var data = table.row( $(this).parents('tr') ).data();
-                window.location.assign("<?php echo base_url();?>admin/order/assign_order/"+data[ 6 ]);
-
-            }
-
-        } );
-
-    });
-
-    function ajaxpost()
-    {
-         $.ajax({
-            type: "POST",
-            url: "<?php echo base_url("admin/order/pending_API"); ?>",
-            data: {data : ""},
-            cache: false,
-            success: function(result){
-                var table = $('#order_pend_table').dataTable();
-                table.fnClearTable();
-
-                data = JSON.parse(result);
-                var no = 0;
-                $.each(data, function(index, data) {
-                    no++;
-                    var serviceman = "";
-
-                    if( typeof(data.service[0])!= 'undefined'){
-                        serviceman =  data.service[0]['user_name']+"("+data.service[0]['user_phone']+")";
-                    }
-                    //!!!--Here is the main catch------>fnAddData
-                    table.fnAddData( [
-                            no,
-                            data.client[0]['user_name'],
-                            serviceman,
-                            data.created_at,
-                            data.updated_at,
-                            data.order_date,
-                            data.id
-                        ]
-                    );
-                });
-
-                setTimeout(ajaxpost, 5000);
-
-            }
-        });
-    };
-
-</script>
 
 <!-- END HEADER -->
 <div class="clearfix">
@@ -127,7 +24,7 @@
                 <ul class="page-breadcrumb">
                     <li>
                         <i class="fa fa-home"></i>
-                        <a href="<?php echo base_url()?>admin/order/pending">Home</a>
+                        <a href="<?php echo base_url()?>admin/dashboard">Home</a>
                         <i class="fa fa-angle-right"></i>
                     </li>
                     <li>
@@ -158,7 +55,7 @@
                         <!--Begin Search and filters-->
                         <div class="table-toolbar">
                         </div>
-                        <table class="col-sm-12 table table-condensed" id="order_pend_table">
+                        <table class="col-sm-12 table table-striped" id="order_pend_table">
                             <thead>
                             <tr>
                                 <th>
@@ -186,6 +83,10 @@
                                 <th>
 
                                 </th>
+                                <th>
+
+                                </th>
+
                             </tr>
                             </thead>
                         </table>
@@ -247,13 +148,121 @@
 <!--- BEGIN DATEPICKER-->
 <script src="<?php echo base_url();?>assets/admin/pages/scripts/components-pickers.js"></script>
 <!--- BEGIN DATEPICKER-->
+<script type="text/javascript" charset="utf-8">
+    var data_array_list = [];
+    $(document).ready(function() {
+
+        var table = $('#order_pend_table').dataTable( {
+            "lengthMenu": [
+                [5, 15, 20, -1],
+                [5, 15, 20, "All"] // change per page values here
+            ],
+            "columns": [
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false
+                },
+                {
+                    "orderable": false,
+                    "visible":false
+                }
+            ]
+            ,
+            "columnDefs": [
+                {
+                "targets": [7],
+                "data": [null, undefined],
+                "defaultContent": ['<button  class="btn btn-small green-jungle" id="edit_btn" type="button">Edit</button>']
+                }
+                ,
+                {
+                    "targets": [8],
+                    "data": [ undefined],
+                    "defaultContent": ['<button class="btn btn-small red-sunglo" id="assign_btn" type="button">Assign</button>']
+                }
+            ]
+        } );
+
+
+        $('#order_pend_table tbody').on( 'click', 'button', function (e) {
+            if(this.id == "edit_btn")
+            {
+                var data = table.api().row($(this).parents('tr')).data();
+                window.location.assign("<?php echo base_url();?>admin/order/edit_order/"+data[ 6 ]);
+
+            }
+            if(this.id == "assign_btn")
+            {
+                var data = table.api().row($(this).parents('tr')).data();
+                window.location.assign("<?php echo base_url();?>admin/order/assign_order/"+data[ 6 ]);
+
+            }
+
+        } );
+        ajaxpost();
+    });
+
+    function ajaxpost()
+    {
+        $.ajax({
+            type: "POST",
+            url: "<?php echo base_url("admin/order/pending_API"); ?>",
+            data: {data : ""},
+            cache: false,
+            success: function(result){
+                var table = $('#order_pend_table').dataTable();
+                data = JSON.parse(result);
+                var no = 0;
+                if(data_array_list.length < data.length){
+                    data_array_list = data;
+                    table.fnClearTable();
+                    $.each(data, function(index, data) {
+                        no++;
+                        var serviceman = "";
+
+                        if( typeof(data.service[0])!= 'undefined'){
+                            serviceman =  data.service[0]['user_name']+"("+data.service[0]['user_phone']+")";
+                        }
+                        //!!!--Here is the main catch------>fnAddData
+                        table.fnAddData( [
+                                no,
+                                data.client[0]['user_name'],
+                                serviceman,
+                                data.created_at,
+                                data.updated_at,
+                                data.order_date,
+                                data.id,
+
+                            ]
+                        );
+                    });
+                }
+                setTimeout(ajaxpost, 5000);
+
+            }
+        });
+    };
+
+</script>
 <script>
     jQuery(document).ready(function() {
         Metronic.init(); // init metronic core componets
         Layout.init(); // init layout
         QuickSidebar.init(); // init quick sidebar
-
-        OrderTableManaged.init();
     });
 
 

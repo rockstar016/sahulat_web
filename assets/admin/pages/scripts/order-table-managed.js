@@ -236,6 +236,7 @@ var OrderTableManaged = function () {
 
             },
             "columnDefs": [{
+
                 "searchable": true,
                 "targets": [5]
             }

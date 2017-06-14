@@ -48,9 +48,9 @@ class Dashboard_model extends CI_Model
 
     public function getNumberJob($status,$servicemanID)
     {
-        $query = "SELECT * FROM tb_order WHERE service_id=".$servicemanID." AND STATUS=".$status;
+        $query = "SELECT * FROM tb_order WHERE service_id=".$servicemanID." AND status=".$status;
         $result = $this->db->query($query);
-        return count($result);
+        return $result->num_rows();
     }
 
     public function getRating($servicemanID)
@@ -69,9 +69,32 @@ class Dashboard_model extends CI_Model
         return $avg;
     }
 
-    public function getOrdersForTable()
+    //checked
+    public function getOrdersForTable($start_date, $end_date)
     {
-        $query = "SELECT * FROM tb_order ORDER BY created_at DESC;";
+        $query = "SELECT * FROM tb_order WHERE tb_order.created_at BETWEEN '".$start_date."' AND '".$end_date."' ORDER BY created_at DESC;";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+    //checked
+    public function getOrdersForTable2($start_date, $end_date)
+    {
+        $query = "SELECT * FROM tb_order WHERE tb_order.updated_at BETWEEN '".$start_date."' AND '".$end_date."' ORDER BY created_at DESC;";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
+    //checked
+    public function getOrdersForTable3($date){
+        $query = "SELECT * FROM tb_order WHERE tb_order.order_date < '".$date."' AND status <> '2' ORDER BY created_at ASC;";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
+    //checked
+    public function getOrdersForTable4($start_date, $end_date)
+    {
+        $query = "SELECT * FROM tb_order WHERE tb_order.created_at BETWEEN '".$start_date."' AND '".$end_date."' AND status = '2' ORDER BY created_at DESC;";
         $result = $this->db->query($query);
         return $result->result_array();
     }
@@ -86,55 +109,65 @@ class Dashboard_model extends CI_Model
 
     public function getServiceNameFromServiceId($nId)
     {
-        $serviceman_arr = $this->getAllServiceman("");
-        for ($i=0; $i<count($serviceman_arr);$i++)
-        {
-            if($i == $nId)
-            {
-                return $serviceman_arr[$i];
-            }
-        }
-        return "";
+        $query = "SELECT * FROM tb_client WHERE kind='0' AND id='".$nId."';";
+        $result = $this->db->query($query);
+        return $result->result_array();
     }
 
-    public function getNoClientRegistration()
+    public function getNoClientRegistration($start_date, $end_date)
     {
-        $query = "SELECT * FROM tb_client";
+        $query = "SELECT * FROM tb_client WHERE created_at < '".$end_date."' AND kind = 1";
         $result = $this->db->query($query);
         return $result->num_rows();
     }
 
-    public function getNoClientOrders()
-    {
-        $query = "SELECT * FROM tb_order";
+    public function getNoFeedback($start_date, $end_date){
+
+        $query = "SELECT * FROM tb_order WHERE (updated_at BETWEEN '".$start_date."' AND '".$end_date."') AND ord_feedback <> 0";
         $result = $this->db->query($query);
         return $result->num_rows();
     }
 
-    public function getNoPendingOrders()
+    public function getNoServiceRegistration($start_date, $end_date)
     {
-        $query = "SELECT * FROM tb_order WHERE status = 0";
+
+        $query = "SELECT * FROM tb_client WHERE created_at < '".$end_date."' AND kind = 0";
         $result = $this->db->query($query);
         return $result->num_rows();
     }
 
-    public function getNoCompletedOrders()
+    public function getNoClientOrders($start_date, $end_date)
     {
-        $query = "SELECT * FROM tb_order WHERE status = 2";
+
+        $query = "SELECT * FROM tb_order WHERE updated_at BETWEEN '".$start_date."' AND '".$end_date."'";
         $result = $this->db->query($query);
         return $result->num_rows();
     }
 
-    public function getNoProcessedOrders()
+    public function getNoPendingOrders($start_date, $end_date)
     {
-        $query = "SELECT * FROM tb_order WHERE status = 1";
+        $query = "SELECT * FROM tb_order WHERE status = 0 AND updated_at BETWEEN '".$start_date."' AND '".$end_date."'";
         $result = $this->db->query($query);
         return $result->num_rows();
     }
 
-    public function getNoTotalFeedback()
+    public function getNoCompletedOrders($start_date, $end_date)
     {
-
+        $query = "SELECT * FROM tb_order WHERE status = 2 AND updated_at BETWEEN '".$start_date."' AND '".$end_date."'";
+        $result = $this->db->query($query);
+        return $result->num_rows();
     }
 
+    public function getNoProcessedOrders($start_date, $end_date)
+    {
+        $query = "SELECT * FROM tb_order WHERE status = 1 AND updated_at BETWEEN '".$start_date."' AND '".$end_date."'";
+        $result = $this->db->query($query);
+        return $result->num_rows();
+    }
+
+    public function getDataForFlotChart($start_date, $end_date){
+        $query = "SELECT DATE(created_at) AS date, COUNT(id) AS count FROM tb_order WHERE tb_order.created_at BETWEEN '".$start_date."' AND '".$end_date."'  GROUP BY DATE(tb_order.created_at);";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
 }

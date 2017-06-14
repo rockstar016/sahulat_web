@@ -50,7 +50,7 @@
 <!-- BEGIN LOGIN -->
 <div class="content">
 	<!-- BEGIN LOGIN FORM -->
-	<form class="login-form" action="<?php echo base_url()?>admin/" method="post">
+	<form class="login-form" action="<?php echo base_url()?>admin/login" method="post">
 
         <?php if ($error == 1):?>
             <div class="alert alert-danger">

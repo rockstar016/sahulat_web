@@ -21,11 +21,11 @@
 				<ul class="page-breadcrumb">
 					<li>
 						<i class="fa fa-home"></i>
-						<a href="<?php echo base_url()?>admin/order">Home</a>
+                        <a href="<?php echo base_url()?>admin/dashboard">Home</a>
 						<i class="fa fa-angle-right"></i>
 					</li>
 					<li>
-						<a href="">Order</a>
+						<a href="<?php echo base_url()?>admin/order/complete">Order</a>
                         <i class="fa fa-angle-right"></i>
 					</li>
                     <li>

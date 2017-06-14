@@ -5,7 +5,7 @@ class Dashboard extends CI_Controller {
 
     public function index() {
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         else{
             $admin = $this->session->userdata['master'];
@@ -20,22 +20,34 @@ class Dashboard extends CI_Controller {
             $data['leftview'] = $left_view;
             $user_list = $this->dashboard_model->getAllClient("");
             $data['userlist'] = $user_list;
-            $data['search'] = "";
+            $current_date = new DateTime;
+            $last_month = new DateTime;
+            $last_month->modify('-1 month');
+
+            $data['start_date'] = $last_month->format("Y-m-d");
+            $data['end_date'] =  $current_date->format("Y-m-d");
             $this->load->view('admin/dashboard', $data);
         }
     }
 
     public function GetIntegratedData()
     {
-        $tabledata1 = $this->GetJsonData();
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+        $start_date .= " 00:00:00";
+        $end_date .= " 23:59:59";
 
-        $tabledata2 = $this->GetJsonDataTableTwo();
+        $tabledata1 = $this->GetJsonData($start_date, $end_date);
 
-        $tabledata3 = $this->GetJsonDataTableThree();
+        $tabledata2 = $this->GetJsonDataTableTwo($start_date, $end_date);
 
-        $tabledata5 = $this->GetJsonDataTableFive();
+        $tabledata3 = $this->GetJsonDataTableThree($start_date, $end_date);
 
-        $table1 = array("tbData1"=>$tabledata1,"tbData2"=>$tabledata2, "tbData3"=>$tabledata3, "tbData4"=>"","tbData5" => $tabledata5);
+        $tabledata4 = $this->GetJsonDataTableFour($start_date, $end_date);
+
+        $tabledata5 = $this->GetJsonDataTableFive($start_date, $end_date);
+
+        $table1 = array("tbData1"=>$tabledata1,"tbData2"=>$tabledata2, "tbData3"=>$tabledata3, "tbData4"=>$tabledata4,"tbData5" => $tabledata5);
 
         $pp = json_encode($table1);
 
@@ -43,36 +55,67 @@ class Dashboard extends CI_Controller {
     }
 
 
+    //checked
     public function GetIntegratedSummary()
     {
-        $noClient = $this->dashboard_model->getNoClientRegistration();
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+        $start_date .= " 00:00:00";
+        $end_date .= " 23:59:59";
 
-        $noClientOrder = $this->dashboard_model->getNoClientOrders();
+        $noClient = $this->dashboard_model->getNoClientRegistration($start_date, $end_date);
+        $noService = $this->dashboard_model->getNoServiceRegistration($start_date, $end_date);
+        $noFeedback = $this->dashboard_model->getNoFeedback($start_date, $end_date);
+        $noClientOrder = $this->dashboard_model->getNoClientOrders($start_date, $end_date);
 
-        $noPendingOrder = $this->dashboard_model->getNoPendingOrders();
+        $noPendingOrders = $this->dashboard_model->getNoPendingOrders($start_date, $end_date);
 
-        $noCompleteOrder = $this->dashboard_model->getNoCompletedOrders();
+        $noCompletedOrders = $this->dashboard_model->getNoCompletedOrders($start_date, $end_date);
 
-        $noProcessedOrder = $this->dashboard_model->getNoProcessedOrders();
+        $noProcessOrders = $this->dashboard_model->getNoProcessedOrders($start_date, $end_date);
 
-        $summary = array("noClientReg"=>$noClient,"noClientOrder"=>$noClientOrder, "noPendingOrder"=>$noPendingOrder, "noCompleteOrder"=>$noCompleteOrder, "noProcessedOrder"=>$noProcessedOrder);
+        $summary = array("noClientReg"=>$noClient, "noServiceReg" => $noService, "noFeedback" => $noFeedback, "noTotalOrders" => $noClientOrder, "noPendingOrders"=>$noPendingOrders,"noProcessOrders"=>$noProcessOrders, "noCompletedOrders" => $noCompletedOrders);
 
         $pp = json_encode($summary);
 
         echo $pp;
     }
 
-    public function GetJsonData()
+    //checked
+    public function GetChartData(){
+        $start_date = $this->input->post('start_date');
+        $end_date = $this->input->post('end_date');
+        $start_date .= " 00:00:00";
+        $end_date .= " 23:59:59";
+
+        $total_orders = $this->dashboard_model->getNoClientOrders($start_date, $end_date);
+
+        $pending_orders = $this->dashboard_model->getNoPendingOrders($start_date, $end_date);
+
+        $completed_orders = $this->dashboard_model->getNoCompletedOrders($start_date, $end_date);
+
+        $accepted_orders = $this->dashboard_model->getNoProcessedOrders($start_date, $end_date);
+
+        /**
+         * Get Flot Chart structure
+         * [index, date, count]
+         */
+
+        $flotChartData = $this->dashboard_model->getDataForFlotChart($start_date, $end_date);
+        $pie_statistic = array("total"=>$total_orders, "pending" => $pending_orders, "complete" => $completed_orders, "accept" => $accepted_orders);
+        $ret_val = array("pie_static"=>$pie_statistic,"flot_static"=>$flotChartData);
+        $pp = json_encode($ret_val);
+
+        echo $pp;
+
+    }
+
+    public function GetJsonData($start_date, $end_date)
     {
-
-        $pending_array = $this->dashboard_model->getOrdersForTable();
+        $pending_array = $this->dashboard_model->getOrdersForTable($start_date, $end_date);
         $totalData = count($pending_array);
-
         $data = array();
-
-
-        for($i = 0; $i < count($pending_array); $i++){
-
+        for($i = 0; $i < $totalData; $i++){
             $client_id = $pending_array[$i]['client_id'];
             switch ($pending_array[$i]['status'])
             {
@@ -94,15 +137,15 @@ class Dashboard extends CI_Controller {
             $pending_array[$i]['service'] = $service_data;
 
             $no = $i+1;
-            $username = $client_data[0]['user_name'];
+            $username = $client_data[0]['user_name']."(".$client_data[0]['user_phone'].")";
             $servicename = "";
 
             if(!empty($pending_array[$i]['service'][0]['user_name']))
             {
-                $servicename = ($pending_array[$i]['service'][0]['user_name']);
+                $servicename = ($pending_array[$i]['service'][0]['user_name']."(".$pending_array[$i]['service'][0]['user_phone'].")");
             }
 
-            $createdAt = $client_data[0]['created_at'];
+            $createdAt = $pending_array[$i]['created_at'];
             $row_data = array('no' => $no,"created_at" => $createdAt,"State" =>$status, "username" => $username, "servicename" => $servicename);
             array_push($data,$row_data);
 
@@ -113,37 +156,20 @@ class Dashboard extends CI_Controller {
     }
 
 
-    public function GetJsonDataTableTwo()
+    public function GetJsonDataTableTwo($start_date, $end_date)
     {
 
         $date = date("Y-m-d");
         $prevdate = date("Y-m-d", mktime(0, 0, 0, date("m"),date("d")-1,date("Y")));
 
-
-        $model_array = $this->dashboard_model->getOrdersForTable();
+        $date = $date." 23:59:59";
+        $prevdate = $prevdate." 00:00:00";
+        $model_array = $this->dashboard_model->getOrdersForTable2($prevdate, $date);
         $totalData = count($model_array);
 
         $data = array();
 
-        for($i = 0; $i < count($model_array); $i++){
-
-            $tmpDate = $model_array[$i]['updated_at'];
-
-            $updatedate = "";
-
-            if((strpos($tmpDate,$date) >0))
-            {
-                $updatedate = "Today";
-            }
-            else if(strpos($tmpDate,$prevdate) >0)
-            {
-                $updatedate = "Yesterday";
-            }
-            else
-            {
-                continue;
-            }
-
+        for($i = 0; $i < $totalData; $i++){
             $client_id = $model_array[$i]['client_id'];
             switch ($model_array[$i]['status'])
             {
@@ -165,15 +191,16 @@ class Dashboard extends CI_Controller {
             $model_array[$i]['service'] = $service_data;
 
             $no = $i+1;
-            $username = $client_data[0]['user_name'];
+            $username = $client_data[0]['user_name']."(".$client_data[0]['user_phone'].")";
             $servicename = "";
 
             if(!empty($model_array[$i]['service'][0]['user_name']))
             {
-                $servicename = ($model_array[$i]['service'][0]['user_name']);
+                $servicename = ($model_array[$i]['service'][0]['user_name']."(".$model_array[$i]['service'][0]['user_phone'].")");
             }
-
-            $row_data = array('no' => $no,"username" => $username, "servicename" => $servicename,"State" =>$status,"toryes" => $updatedate);
+            $updated_date = $model_array[$i]['updated_at'];
+            $updated_date = substr($updated_date, 0,10);
+            $row_data = array('no' => $no,"username" => $username, "servicename" => $servicename,"State" =>$status,"toryes" => $updated_date);
             array_push($data,$row_data);
 
         }
@@ -182,17 +209,17 @@ class Dashboard extends CI_Controller {
 
     }
 
-    public function GetJsonDataTableThree()
+    public function GetJsonDataTableThree($start_date, $end_date)
     {
+        $date = date("Y-m-d");
+        $date = $date." 23:59:59";
 
-        $model_array = $this->dashboard_model->getOrdersForTable();
+        $model_array = $this->dashboard_model->getOrdersForTable3($date);
         $totalData = count($model_array);
 
         $data = array();
 
-        for($i = 0; $i < count($model_array); $i++){
-
-            $tmpDate = $model_array[$i]['updated_at'];
+        for($i = 0; $i < $totalData; $i++){
 
             $client_id = $model_array[$i]['client_id'];
             $client_data = $this->dashboard_model->get_client($client_id);
@@ -204,13 +231,13 @@ class Dashboard extends CI_Controller {
             $model_array[$i]['service'] = $service_data;
 
             $no = $i+1;
-            $username = $client_data[0]['user_name'];
+            $username = $client_data[0]['user_name']."(".$client_data[0]['user_phone'].")";
             $servicename = "";
 
-            if(!empty($model_array[$i]['service'][0]['user_name']))
-            {
-                $servicename = ($model_array[$i]['service'][0]['user_name']);
+            if(!empty($model_array[$i]['service'][0]['user_name'])) {
+                $servicename = ($model_array[$i]['service'][0]['user_name']."(".$model_array[$i]['service'][0]['user_phone'].")");
             }
+
             $orderdate =  $model_array[$i]['order_date'];
             $row_data = array('no' => $no,"username" => $username, "created_date" => $servicename,"order_date" =>$orderdate);
             array_push($data,$row_data);
@@ -221,31 +248,24 @@ class Dashboard extends CI_Controller {
 
     }
 
-    public function GetJsonDataTableFour(){
-        $client_arr = $this->dashboard_model->getAllServiceman("");
+    public function GetJsonDataTableFour($start_date, $end_date){
+        $pending_array = $this->dashboard_model->getOrdersForTable4($start_date, $end_date);
+        $totalData = count($pending_array);
         $data = array();
-
-        for($clId = 0; $clId < count($client_arr); $clId++)
-        {
-            $pp = $client_arr[$clId];
-            $servicename  = $pp['user_name'];
-            $phonenumber =  $client_arr[$clId]['user_phone'];
-            $servicemanID = $clId;
-            $jobAssigned = $this->dashboard_model->getNumberJob($clId,0);
-            $JobProcessedNumber = $this->dashboard_model->getNumberJob($clId,1);
-            $JobCompletedNumber = $this ->dashboard_model ->getNumberJob($clId,2);
-            $JobPendingNumber = 0;
-            $AverrespControl = 0;
-            $Averrespclient = 0;
-            $rating = $this->dashboard_model->getRating($servicemanID);
-            $row_data = array('no' => $clId,"servicename" => $servicename, "phonenum" => $phonenumber,"Job_Assign"=>$jobAssigned,"JobProcess"=>$JobProcessedNumber,"JobPend"=>$JobPendingNumber,"AvgRespControl"=>$AverrespControl,"JobComplete"=>$JobCompletedNumber,"AvgrepClient"=>$Averrespclient,"rating"=>$rating);
+        for($i = 0; $i < $totalData; $i++){
+            $client_id = $pending_array[$i]['client_id'];
+            $client_data = $this->dashboard_model->get_client($client_id);
+            $pending_array[$i]['client'] = $client_data;
+            $no = $i+1;
+            $username = $client_data[0]['user_name']."(".$client_data[0]['user_phone'].")";
+            $row_data = array('no' => $no,"created_date" => $pending_array[$i]['created_at'], "username" => $username, "order_date" =>$pending_array[$i]['order_date'], "completed_date" => $pending_array[$i]['updated_at']);
             array_push($data,$row_data);
         }
 
-        return $data;
+        return  $data;
     }
 
-    public function GetJsonDataTableFive(){
+    public function GetJsonDataTableFive($start_date, $end_date){
 
         $client_arr = $this->dashboard_model->getAllServiceman("");
         $data = array();
@@ -255,14 +275,14 @@ class Dashboard extends CI_Controller {
             $pp = $client_arr[$clId];
             $servicename  = $pp['user_name'];
             $phonenumber =  $client_arr[$clId]['user_phone'];
-            $servicemanID = $clId;
-            $jobAssigned = $this->dashboard_model->getNumberJob($clId,0);
-            $JobProcessedNumber = $this->dashboard_model->getNumberJob($clId,1);
-            $JobCompletedNumber = $this ->dashboard_model ->getNumberJob($clId,2);
+            $service_man_id = $client_arr[$clId]['id'];
+            $jobAssigned = $this->dashboard_model->getNumberJob(0, $service_man_id);
+            $JobProcessedNumber = $this->dashboard_model->getNumberJob(1, $service_man_id);
+            $JobCompletedNumber = $this ->dashboard_model ->getNumberJob(2, $service_man_id);
             $JobPendingNumber = 0;
             $AverrespControl = 0;
             $Averrespclient = 0;
-            $rating = $this->dashboard_model->getRating($servicemanID);
+            $rating = $this->dashboard_model->getRating($service_man_id);
             $row_data = array('no' => $clId,"servicename" => $servicename, "phonenum" => $phonenumber,"Job_Assign"=>$jobAssigned,"JobProcess"=>$JobProcessedNumber,"JobPend"=>$JobPendingNumber,"AvgRespControl"=>$AverrespControl,"JobComplete"=>$JobCompletedNumber,"AvgrepClient"=>$Averrespclient,"rating"=>$rating);
             array_push($data,$row_data);
 
@@ -273,24 +293,13 @@ class Dashboard extends CI_Controller {
 
     public function GetPosData()
     {
-
         $client_arr = $this->dashboard_model->getPosData();
         $data = array();
-
-        for($clId = 0; $clId < count($client_arr); $clId++)
-        {
-
+        for($clId = 0; $clId < count($client_arr); $clId++) {
             $pp = $client_arr[$clId];
             $servicedata= $this->dashboard_model->getServiceNameFromServiceId($pp['service_id']);
-
-            if($servicedata == "")
-            {
-                continue;
-            }
-
-            $row_data = array('log' => $pp['service_cur_long'], 'lat'=>$pp['service_cur_lat'], 'servicename' => $servicedata['user_name'], 'servicephone'=>$servicedata['user_phone']);
+            $row_data = array('log' => $pp['service_cur_long'], 'lat'=>$pp['service_cur_lat'], 'servicename' => $servicedata[0]['user_name'], 'servicephone'=>$servicedata[0]['user_phone']);
             array_push($data,$row_data);
-
         }
 
         $rval = json_encode($data);

@@ -5,7 +5,7 @@ class Admin extends CI_Controller {
     public function index()
     {
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $admin = $this->session->userdata['master'];
         $data_header['admin'] = $admin;
@@ -25,7 +25,7 @@ class Admin extends CI_Controller {
 
     public function create(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('username','UserName','required');
@@ -58,7 +58,7 @@ class Admin extends CI_Controller {
     public function edit($id =0){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('username','UserName','required');
@@ -92,7 +92,7 @@ class Admin extends CI_Controller {
     public function del($id =0){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $this->admin_model->removeAdmin($id);
         redirect('admin/admin');

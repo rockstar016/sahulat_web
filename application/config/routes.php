@@ -55,9 +55,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 $route['api/client/check'] = 'api/client/check';
 $route['api/client/signup'] = 'api/client/signup';
-$route['api/client/login'] = 'api/client/login';
-$route['api/client/activate-email/(:any)'] = 'api/client/active_email/$1';
-$route['api/client/activate-phone/(:any)'] = 'api/client/active_phone/$1';
+//$route['api/client/login'] = 'api/client/login';
+//$route['api/client/activate-email/(:any)'] = 'api/client/active_email/$1';
+//$route['api/client/activate-phone/(:any)'] = 'api/client/active_phone/$1';
 $route['api/client/accountinfo'] = 'api/client/updateinfo';
 $route['api/client/email-verify'] = 'api/client/email_verify';
 $route['api/client/phone-verify'] = 'api/client/phone_verify';
@@ -119,7 +119,7 @@ $route['admin/customer/password/(:any)'] = 'admin/customers/change_password/$1';
 $route['admin/customer/create'] = 'admin/customers/create';
 $route['admin/dashboard'] = 'admin/dashboard';
 $route['admin/logout'] = 'admin/login/logout';
-$route['admin'] = 'admin/login';
+$route['admin'] = 'admin/dashboard';
 
 $route['default_controller'] = 'Welcome';
 $route['404_override'] = '';

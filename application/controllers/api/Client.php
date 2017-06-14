@@ -67,26 +67,9 @@ class Client extends \Restserver\Libraries\REST_Controller
             return $ret_val;
         }
     }
-
-    /**
-     * Send sms to user phone number
-     * @param $phone_to_send
-     * @param $user_name
-     * @param $user_password
-     * @return bool
-     */
-    private function send_verification_sms($phone_to_send, $user_name){
-        $this->load->library('PHPRequests');
-        Requests::register_autoloader();
-        //$response = Requests::get('https://telenorcsms.com.pk:27677/corporate_sms2/api/auth.jsp?msisdn='.$this->config->item('sms_manager').'&password='.$this->config->item('sms_pwd'));
-        //echo ($response->body);
-
-        return true;
-        //todo make functions for sending sms and sending result to client.
-    }
-
+/*
+    //I think it is useless function. I leave it for future.
     private function send_verification_email($email_code, $email_to_send, $user_name){
-
 
         $this->load->library('email');
         $config['protocol']='smtp';
@@ -113,32 +96,33 @@ class Client extends \Restserver\Libraries\REST_Controller
         $this->email->message($message);
         $this->email->send();
     }
+*/
+//    function active_email_get($token_id){
+//            $user_data = $this->verificationToken($token_id);
+//            if($user_data['result'] == true){
+//                if($this->client_model->activate_email($user_data['user_data']->id)){
+//                    echo ('Thanks.Your email is activated to use service.');
+//                }
+//            }
+//            else{
+//                echo('Sorry. Try again later.');
+//            }
+//    }
 
-    function active_email_get($token_id){
-            $user_data = $this->verificationToken($token_id);
-            if($user_data['result'] == true){
-                if($this->client_model->activate_email($user_data['user_data']->id)){
-                    echo ('Thanks.Your email is activated to use service.');
-                }
-            }
-            else{
-                echo('Sorry. Try again later.');
-            }
-    }
+//    function active_phone_get($token_id){
+//        $user_data = $this->verificationToken($token_id);
+//        if($user_data['result'] == true){
+//            if($this->client_model->activate_phone($user_data['user_data']->id)){
+//                echo ('Thanks.Your phone is activated to use service.');
+//            }
+//        }
+//        else{
+//            echo ('Sorry. Try again later');
+//        }
+//    }
 
-    function active_phone_get($token_id){
-        $user_data = $this->verificationToken($token_id);
-        if($user_data['result'] == true){
-            if($this->client_model->activate_phone($user_data['user_data']->id)){
-                echo ('Thanks.Your phone is activated to use service.');
-            }
-        }
-        else{
-            echo ('Sorry. Try again later');
-        }
-    }
-
-
+//I think it is useless function. I leave it for future.
+/*
     function email_verify_post(){
         $token_id = $this->input->post('token');
         $user_data = $this->verificationToken($token_id);
@@ -153,6 +137,7 @@ class Client extends \Restserver\Libraries\REST_Controller
         }
     }
 
+*/
     function phone_verify_post(){
         $token_id = $this->input->post('token');
         $user_data = $this->verificationToken($token_id);
@@ -183,7 +168,6 @@ class Client extends \Restserver\Libraries\REST_Controller
             $data['result'] = 'false';
             $this->response($data);
         }
-
     }
 
     function check_post(){
@@ -215,6 +199,21 @@ class Client extends \Restserver\Libraries\REST_Controller
             $data['result'] = 'false';
             $this->response($data);
         }
-
     }
+
+    function getUserInfo_post(){
+        $token_id = $this->input->post('token');
+        $user_data = $this->verificationToken($token_id);
+        if($user_data['result'] == true){
+            $user_id = $this->input->post('user_id');
+            $user = $this->client_model->get_client($user_id);
+            $data = array('result'=>true, 'user'=>$user[0]);
+            $this->response($data);
+        }
+        else{
+            $data['result'] = 'false';
+            $this->response($data);
+        }
+    }
+
 }

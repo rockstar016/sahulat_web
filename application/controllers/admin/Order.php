@@ -6,7 +6,7 @@ class Order extends CI_Controller {
     public function index() {
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -64,7 +64,7 @@ class Order extends CI_Controller {
          * load page for customer detail page
          */
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -99,7 +99,7 @@ class Order extends CI_Controller {
 
     public function total(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $from = $this->input->post('from');
         $to = $this->input->post('to');
@@ -113,7 +113,7 @@ class Order extends CI_Controller {
 
     public function manage(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('date_time_order','date_time_order','required');
@@ -148,7 +148,7 @@ class Order extends CI_Controller {
     public function pending(){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -200,7 +200,7 @@ class Order extends CI_Controller {
 
     public function show_accept(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -231,7 +231,7 @@ class Order extends CI_Controller {
 
     public function complete(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -262,7 +262,7 @@ class Order extends CI_Controller {
 
     public function assign_order($id){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $admin = $this->session->userdata['master'];
@@ -292,7 +292,7 @@ class Order extends CI_Controller {
     public function assign_order_api(){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $service_id = $this->input->post('service_id');
@@ -306,7 +306,7 @@ class Order extends CI_Controller {
      */
     public function getFCMToken(){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $service_id = $this->input->post('service_id');
@@ -319,7 +319,7 @@ class Order extends CI_Controller {
 
     public function edit_order($id = 0){
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('date_time_order','date_time_order','required');

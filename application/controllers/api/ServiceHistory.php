@@ -3,16 +3,14 @@
 /**
  * Created by PhpStorm.
  * User: rock
- * Date: 3/16/17
- * Time: 1:16 AM
+ * Date: 5/3/17
+ * Time: 8:38 AM
  */
 require (APPPATH.'libraries/REST_Controller.php');
 require (APPPATH.'libraries/JWT.php');
 require_once(APPPATH.'libraries/PHPRequests.php');
 use \Firebase\JWT\JWT;
-class Service extends \Restserver\Libraries\REST_Controller
-{
-
+class ServiceHistory extends \Restserver\Libraries\REST_Controller{
     private function verificationToken($token){
         $ret_val = array();
         try{
@@ -38,26 +36,27 @@ class Service extends \Restserver\Libraries\REST_Controller
         }
     }
 
-    /**
-     * update posistion
-     */
-    public function updateposition_post(){
+    public function replyToAssignedJob_post(){
         $token_id = $this->input->post("token");
-        $lat = $this->input->post("lat");
-        $lot = $this->input->post("lot");
         $user_data = $this->verificationToken($token_id);
         if($user_data['result'] == true){
-            $this->serviceman_model->updateposition($user_data['user_data']->id, $lat,$lot);
-            $data = array('result'=>'true');
-            $this->response($data);
+            $service_id = $user_data['user_data']->id;
+            $is_accept = $this->post('is_accept');
+            $order_id = $this->post('order_id');
+            $assigned_time = $this->post('assigned_time');
+            $this->serviceman_history_model->insertNewHistory($service_id, $order_id, $is_accept, $assigned_time);
+            if($is_accept == 0){
+                //reject
+                $this->order_model->rejectAssignedJob($order_id);
+            }
+            else{
+                //accept
+                $estimation_time = $this->post('estimation_time');
+                $this->order_model->acceptAssignedJob($order_id, $estimation_time);
+            }
         }
         else{
             $this->response(array("result"=>'false'));
         }
     }
-
-    /**
-     *
-     */
-
 }

@@ -77,7 +77,7 @@ class Customers extends CI_Controller {
     public function edit($id =0){
 
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
 
         $this->form_validation->set_rules('username','UserName','required');

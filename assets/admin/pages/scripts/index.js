@@ -95,6 +95,58 @@ var Index = function () {
                     url: 'http://google.com/'
                 }]
             });
+        },
+        initDashboardDaterange: function () {
+
+            if (!jQuery().daterangepicker) {
+                return;
+            }
+
+            $('#dashboard-report-range').daterangepicker({
+                    opens: (Metronic.isRTL() ? 'right' : 'left'),
+                    startDate: moment().subtract(29,'days'),
+                    endDate: moment(),
+                    minDate: '01/01/2012',
+                    maxDate: '12/31/2020',
+                    dateLimit: {
+                        days: 60
+                    },
+                    showDropdowns: true,
+                    showWeekNumbers: true,
+                    timePicker: false,
+                    timePickerIncrement: 1,
+                    timePicker12Hour: true,
+                    ranges: {
+                        'Today': [moment(), moment()],
+                        'Yesterday': [moment().subtract( 1,'days'), moment().subtract(1, 'days')],
+                        'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                        'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                        'This Month': [moment().startOf('month'), moment().endOf('month')],
+                        'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                    },
+                    buttonClasses: ['btn btn-sm'],
+                    applyClass: ' blue',
+                    cancelClass: 'default',
+                    format: 'YYYY-MM-DD',
+                    separator: ' to ',
+                    locale: {
+                        applyLabel: 'Apply',
+                        fromLabel: 'From',
+                        toLabel: 'To',
+                        customRangeLabel: 'Custom Range',
+                        daysOfWeek: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+                        monthNames: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+                        firstDay: 1
+                    }
+                },
+                function (start, end) {
+                    $('#dashboard-report-range span').html(start.format('YYYY-MM-DD') + ' - ' + end.format('YYYY-MM-DD'));
+                }
+            );
+
+
+            $('#dashboard-report-range span').html(moment().subtract(29,'days').format('YYYY-MM-DD') + ' - ' + moment().format('YYYY-MM-DD'));
+            $('#dashboard-report-range').show();
         }
     };
 

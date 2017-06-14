@@ -5,7 +5,7 @@ class Feedback extends CI_Controller {
 
     public function index() {
         if($this->session->has_userdata('logged_in') == false){
-            redirect('admin/');
+            redirect('admin/login');
         }
         $admin = $this->session->userdata['master'];
         $data_header['admin'] = $admin;
