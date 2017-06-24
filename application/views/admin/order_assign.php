@@ -87,7 +87,7 @@
                                             </select>
                                         </div>
                                     </td>
-                                    <td><?php echo $order['0']['order_date']?></td>
+                                    <td><?php echo $order['0']['estimation_arrival']?></td>
                                     <td><button id="bt_assign" class="btn red-sunglo" data-value="<?php echo $order['0']['id']?>" onclick="OnClickAssignButton()">Assign Order</button> </td>
                                 </tr>
                             </tbody>
@@ -95,7 +95,8 @@
                         <!--END ORDER DETAILS VIEW TABLE-->
 
                         <!-- BEGIN GOOGLE MAP -->
-                        <div id="client_service_map" class="gmaps" data-lat="<?php echo $order['0']['ord_lat'];?>" data-lot="<?php echo $order['0']['ord_long'];?>">
+
+                        <div id="client_service_map" class="gmaps" data-lat="<?php echo (count($location) > 0) ? $location['0']['service_cur_lat'] : '';?>" data-lot="<?php echo (count($location) > 0) ? $location['0']['service_cur_long']: '';?>">
 
                         </div>
                         <!-- END GOOGLE MAP-->

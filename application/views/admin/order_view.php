@@ -92,9 +92,17 @@
                                         <?php if ($orderdetail['0']['status'] == '0'):?>
                                             <span class="label bg-red-sunglo">pending</span>
                                         <?php elseif ($orderdetail['0']['status'] == '1'):?>
-                                            <span class="label bg-green-jungle">accepted</span>
+                                            <span class="label bg-green-jungle">processed</span>
                                         <?php elseif ($orderdetail['0']['status'] == '2'):?>
+                                            <span class="label bg-blue-madison">assigned</span>
+                                        <?php elseif ($orderdetail['0']['status'] == '3'):?>
+                                            <span class="label bg-blue-madison">accepted</span>
+                                        <?php elseif ($orderdetail['0']['status'] == '4'):?>
+                                            <span class="label bg-blue-madison">served</span>
+                                        <?php elseif ($orderdetail['0']['status'] == '6'):?>
                                             <span class="label bg-blue-madison">completed</span>
+                                            <?php elseif ($orderdetail['0']['status'] == '7'):?>
+                                            <span class="label bg-blue-madison">cancelled</span>
                                         <?php endif;?>
                                     </td>
                                     <?php if ($orderdetail['0']['status'] == '2'):?>
@@ -116,15 +124,14 @@
                                         </td>
                                     <?php endif;?>
                                     <td><?php echo $orderdetail['0']['updated_at']?></td>
-                                    <td><?php echo $orderdetail['0']['order_date']?></td>
+                                    <td><?php echo $orderdetail['0']['estimation_arrival']?></td>
                                 </tr>
                             </tbody>
                         </table>
                         <!--END ORDER DETAILS VIEW TABLE-->
 
                         <!-- BEGIN GOOGLE MAP -->
-                        <div id="google_map" class="gmaps" data-name="<?php echo $orderdetail['0']['ord_lat'];?>" data-value="<?php echo $orderdetail['0']['ord_long'];?>">
-
+                       <div id="google_map" class="gmaps" data-name="<?php echo (count($location) > 0) ? $location['0']['service_cur_lat'] : '';?>" data-value="<?php echo (count($location) > 0) ? $location['0']['service_cur_long'] : '';?>">
                         </div>
                         <!-- END GOOGLE MAP-->
                     </div>

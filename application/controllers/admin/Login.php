@@ -28,7 +28,6 @@ class Login extends CI_Controller {
                     redirect('admin');
                 }
                 else{
-
                     $data = array();
                     $data['error'] = true;
                     $this->load->view('login/admin_login',$data);

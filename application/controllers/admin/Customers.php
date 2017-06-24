@@ -67,7 +67,7 @@ class Customers extends CI_Controller {
         $data['leftview'] = $left_view;
         $user = $this->client_model->get_client($id);
         $data['user'] = $user;
-        $orderlist = $this->order_model->getAllOrders($id);
+        $orderlist = $this->order_model->getOrderList_Client($id, 0, 20);
 
         $data['orderlist'] = $orderlist;
         $this->load->view('admin/customers_view', $data);
@@ -164,6 +164,7 @@ class Customers extends CI_Controller {
         if($this->session->has_userdata('logged_in') == false){
             redirect('admin/');
         }
+
 
         $this->form_validation->set_rules('username','UserName','required');
         $this->form_validation->set_rules('userphone','PhoneNumber','required');

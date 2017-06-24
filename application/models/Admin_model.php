@@ -42,6 +42,7 @@ class Admin_model extends CI_Model
             'master_password' => $this->getHash($pwd),
             'master_phone' => $phone,
             'master_email' => $email,
+            'level' => 1,
         );
         $this->db->insert('tb_admin',$data);
         $insert_id = $this->db->insert_id();
@@ -58,7 +59,8 @@ class Admin_model extends CI_Model
             'master_name' => $name,
             'master_phone'  => $phone,
             'master_email'  => $email,
-            'master_password' => $this->getHash($password)
+            'master_password' => $this->getHash($password),
+            'level' => 1,
         );
         $this->db->where('id', $id);
         $this->db->update('tb_admin', $data);

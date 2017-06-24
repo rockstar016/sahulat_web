@@ -87,11 +87,11 @@
                                         ?>
                                     </th>
                                     <th>
-                                        <?php if($user[0]['verified_phone'] == true):?>
+                                        <?php if($user[0]['verified_phone'] == true): ?>
                                             <span class="fa fa-check font-blue"></span>
-                                        <? else:?>
+                                        <?php else: ?>
                                             <span class="fa fa-times font-red-sunglo"></span>
-                                        <? endif;?>
+                                        <?php endif; ?>
                                     </th>
                                 </tr>
                                 <tr>
@@ -106,9 +106,9 @@
                                     <th>
                                         <?php if($user[0]['verified_email'] == true):?>
                                             <span class="fa fa-check font-blue"></span>
-                                        <? else:?>
+                                        <?php else:?>
                                             <span class="fa fa-times font-red-sunglo"></span>
-                                        <? endif;?>
+                                        <?php endif;?>
                                     </th>
                                 </tr>
                             </tbody>

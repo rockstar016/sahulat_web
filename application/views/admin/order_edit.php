@@ -44,7 +44,7 @@
                             </div>
                     </div>
                     <div class="portlet-body form">
-                        <form class="form-horizontal" role="form" method="post" action="<?php echo  base_url();?>admin/order/edit_order/<?php echo $order['id'];?>">
+                        <form class="form-horizontal" enctype="multipart/form-data" role="form" method="post" action="<?php echo  base_url();?>admin/order/edit_order/<?php echo $order['id'];?>">
                             <div class="form-body">
 
                                 <div class="form-group">
@@ -60,7 +60,7 @@
                                     <div class="col-sm-2 control-label">Deliver Time</div>
                                     <div class="col-sm-10">
                                         <div class="input-group date form_datetime">
-                                            <input id="date_time_order" name="date_time_order" type="text" size="16" readonly class="form-control" required value="<?php echo $order['order_date']?>">
+                                            <input id="date_time_order" name="date_time_order" type="text" size="16" readonly class="form-control" required value="<?php echo $order['estimation_arrival']?>">
                                             <span class="input-group-btn">
                                             <button class="btn default date-set" type="button"><i class="fa fa-calendar"></i></button>
                                             </span>
@@ -68,17 +68,18 @@
                                     </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <div class="col-sm-2 control-label">GPS location</div>
                                     <div class="col-sm-10">
                                         <div class="input-group">
-                                            <input name="loc_lat" type="text" size="16"  class="form-control" required onkeypress="validate(event)" value="<?php echo $order['ord_lat']?>">
+                                            <input name="loc_lat" type="text" size="16"  class="form-control" required onkeypress="validate(event)" value="">
                                             <span class="input-group-addon">
                                                 - </span>
-                                            <input name="loc_lot" type="text" size="16"  class="form-control" required onkeypress="validate(event)" value="<?php echo $order['ord_long']?>">
+                                            <input name="loc_lot" type="text" size="16"  class="form-control" required onkeypress="validate(event)" value="">
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
+
 
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Delivery Address</div>
@@ -88,6 +89,15 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <!--<div class="form-group">
+                                    <div class="col-sm-2 control-label">Order Image</div>
+                                    <div class="col-sm-10  ">
+                                        <div class="input-group col-sm-12">
+                                            <input name="image" accept="image/*" type="file" size="16" class="form-control" required autocomplete="true">
+                                        </div>
+                                    </div>
+                                </div>-->
 
 
                                 <div class="form-group">

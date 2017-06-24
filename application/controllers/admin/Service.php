@@ -30,6 +30,7 @@ class Service extends CI_Controller {
             redirect('admin/login');
         }
 
+
         $admin = $this->session->userdata['master'];
         $data_header['admin'] = $admin;
         $data_header['page'] = 'serviceview';
@@ -42,8 +43,7 @@ class Service extends CI_Controller {
         $data['leftview'] = $left_view;
         $user = $this->client_model->get_client($id);
         $data['user'] = $user;
-        $orderlist = $this->order_model->getOrdersOfServiceman($id);
-
+        $orderlist = $this->order_model->getOrderList_Service($id, '', 20);
         $data['orderlist'] = $orderlist;
         $this->load->view('admin/service_view', $data);
     }

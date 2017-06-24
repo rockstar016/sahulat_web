@@ -1,0 +1,33 @@
+*   Trying 203.215.160.179...
+* TCP_NODELAY set
+* Connected to telenorcsms.com.pk (203.215.160.179) port 27677 (#0)
+* ALPN, offering http/1.1
+* Cipher selection: ALL:!EXPORT:!EXPORT40:!EXPORT56:!aNULL:!LOW:!RC4:@STRENGTH
+* successfully set certificate verify locations:
+*   CAfile: E:/xampp/ca-bundle.crt
+  CApath: none
+* NPN, negotiated HTTP1.1
+* SSL connection using TLSv1.2 / ECDHE-RSA-AES256-GCM-SHA384
+* ALPN, server did not agree to a protocol
+* Server certificate:
+*  subject: CN=telenorcsms.com.pk
+*  start date: Feb 14 00:00:00 2017 GMT
+*  expire date: Feb 28 23:59:59 2019 GMT
+*  subjectAltName: host "telenorcsms.com.pk" matched cert's "telenorcsms.com.pk"
+*  issuer: C=US; O=thawte, Inc.; OU=Domain Validated SSL; CN=thawte DV SSL CA - G2
+*  SSL certificate verify ok.
+> GET /corporate_sms2/api/sendsms.jsp?session_id=a6bc04fc88e54324b421dea2914f99ca&to=923446800107&text=We%20have%20received%20your%20order.%20We%20will%20get%20you%20back%20soon.%20Thanks HTTP/1.1
+Host: telenorcsms.com.pk:27677
+User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.52 Safari/537.17
+Accept: */*
+
+< HTTP/1.1 200 OK
+< Server: nginx
+< Date: Mon, 19 Jun 2017 20:11:06 GMT
+< Content-Type: text/xml;charset=UTF-8
+< Content-Length: 147
+< Connection: keep-alive
+< Access-Control-Allow-Origin: *
+< 
+* Curl_http_done: called premature == 0
+* Connection #0 to host telenorcsms.com.pk left intact

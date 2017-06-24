@@ -8,6 +8,7 @@
 require (APPPATH.'libraries/REST_Controller.php');
 require (APPPATH.'libraries/JWT.php');
 require_once(APPPATH.'libraries/PHPRequests.php');
+require_once(APPPATH.'helpers/PaymentGateway_helper.php');
 use \Firebase\JWT\JWT;
 class Order extends \Restserver\Libraries\REST_Controller
 {
@@ -273,6 +274,17 @@ class Order extends \Restserver\Libraries\REST_Controller
                 //transfer money to company account.
                 //todo card management should be done here
                 //update the user payout history
+
+                /*
+                 * @By Zulafqar Ali
+                 * I will complete this part of implementation
+                 * after getting everything is sort out about
+                 * gateway....
+                 * 
+                 * */
+                $payment_handler = new EasyPayPayments();
+                print_r($payment_handler->openAPICreditCard($amount, $order_id, $user_data['user_data'], $card_token));
+                exit;
                 $this->checkout_model->insertNewRecord($order_id, $pay_kind, $amount, "Card token");
             }
 

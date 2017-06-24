@@ -40,76 +40,76 @@
             <div class="row">
                 <div class="portlet">
                     <div class="portlet-title">
-                            <div class="caption">
-                                <span class="caption-subject bold font-blue-steel"> Member Profile Information</span>
-                            </div>
-                            <div class="tools">
-                                <a href="" class="collapse"></a>
-                            </div>
+                        <div class="caption">
+                            <span class="caption-subject bold font-blue-steel"> Member Profile Information</span>
+                        </div>
+                        <div class="tools">
+                            <a href="" class="collapse"></a>
+                        </div>
                     </div>
                     <div class="portlet-body">
                         <table class="table">
                             <thead>
-                                <tr>
-                                    <th>
-                                        #
-                                    </th>
-                                    <th>
-                                        Information
-                                    </th>
-                                    <th>
-                                        Verified
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>
+                                    #
+                                </th>
+                                <th>
+                                    Information
+                                </th>
+                                <th>
+                                    Verified
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <th>
-                                        Member Name
-                                    </th>
-                                    <th>
-                                        <?php
-                                            echo $user[0]['user_name'];
-                                        ?>
-                                    </th>
-                                    <th>
+                            <tr>
+                                <th>
+                                    Member Name
+                                </th>
+                                <th>
+                                    <?php
+                                    echo $user[0]['user_name'];
+                                    ?>
+                                </th>
+                                <th>
+                                    <span class="fa fa-check font-blue"></span>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Phone number
+                                </th>
+                                <th>
+                                    <?php
+                                    echo $user[0]['user_phone'];
+                                    ?>
+                                </th>
+                                <th>
+                                    <?php if($user[0]['verified_phone'] == true):?>
                                         <span class="fa fa-check font-blue"></span>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Phone number
-                                    </th>
-                                    <th>
-                                        <?php
-                                            echo $user[0]['user_phone'];
-                                        ?>
-                                    </th>
-                                    <th>
-                                        <?php if($user[0]['verified_phone'] == true):?>
-                                            <span class="fa fa-check font-blue"></span>
-                                        <? else:?>
-                                            <span class="fa fa-times font-red-sunglo"></span>
-                                        <? endif;?>
-                                    </th>
-                                </tr>
-                                <tr>
-                                    <th>
-                                        Email address
-                                    </th>
-                                    <th>
-                                        <?php
-                                            echo $user[0]['user_email'];
-                                        ?>
-                                    </th>
-                                    <th>
-                                        <?php if($user[0]['verified_email'] == true):?>
-                                            <span class="fa fa-check font-blue"></span>
-                                        <? else:?>
-                                            <span class="fa fa-times font-red-sunglo"></span>
-                                        <? endif;?>
-                                    </th>
-                                </tr>
+                                    <?php else:?>
+                                        <span class="fa fa-times font-red-sunglo"></span>
+                                    <?php endif;?>
+                                </th>
+                            </tr>
+                            <tr>
+                                <th>
+                                    Email address
+                                </th>
+                                <th>
+                                    <?php
+                                    echo $user[0]['user_email'];
+                                    ?>
+                                </th>
+                                <th>
+                                    <?php if($user[0]['verified_email'] == true):?>
+                                        <span class="fa fa-check font-blue"></span>
+                                    <?php else:?>
+                                        <span class="fa fa-times font-red-sunglo"></span>
+                                    <?php endif;?>
+                                </th>
+                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -140,37 +140,41 @@
 
                         <table class="col-sm-12 table table-condensed" id="customer_order_history">
                             <thead>
-                                <tr>
-                                    <th>
-                                        No
-                                    </th>
-                                    <th>
-                                        Date
-                                    </th>
-                                    <th>
-                                        Status
-                                    </th>
-                                    <th>
-                                        Position
-                                    </th>
-                                </tr>
+                            <tr>
+                                <th>
+                                    No
+                                </th>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Status
+                                </th>
+                                <th>
+                                    Position
+                                </th>
+                            </tr>
                             </thead>
                             <tbody>
-                                <?php for($i = 0 ; $i < count($orderlist); $i++):?>
+                            <?php for($i = 0 ; $i < count($orderlist); $i++):?>
                                 <tr class="odd gradeX">
                                     <td><?php echo $i+1;?></td>
                                     <td><?php echo $orderlist[$i]['updated_at']?></td>
                                     <?php if($orderlist[$i]['status'] == 0):?>
                                         <td><span class="label bg-red-sunglo">pending</span> </td>
                                     <?php elseif ($orderlist[$i]['status'] == 1):?>
-                                        <td><span class="label bg-green-jungle">accepted</span> </td>
+                                        <td><span class="label bg-green-jungle">processed</span> </td>
                                     <?php elseif ($orderlist[$i]['status'] == 2):?>
-                                        <td><span class="label bg-blue-madison">completed</span> </td>
+                                        <td><span class="label bg-blue-madison">assigned</span> </td>
+                                    <?php elseif ($orderlist[$i]['status'] == 3): ?>
+                                        <td><span class="label bg-blue-madison">accepted</span> </td>
+                                        <?php elseif ($orderlist[$i]['status'] == 4): ?>
+                                        <td><span class="label bg-blue-madison">served</span> </td>
                                     <?php endif;?>
 
                                     <td><a class="btn btn-xs blue-madison" href="<?php echo base_url().'admin/order/view/'.$orderlist[$i]['id'];?>"><i class="fa fa-map-marker"></i> Show Details </a></td>
                                 </tr>
-                                <?php endfor;?>
+                            <?php endfor;?>
                             </tbody>
                         </table>
                     </div>
@@ -234,10 +238,92 @@
         TableManaged.init();
 
     });
-    
+
     function OnClickRefreshStatistic() {
         window.alert("click");
     }
+
+    function OnClickAcceptButton(){
+        ord_id = $('#bt_accept').data('order-id');
+        service_man_id = $('#bt_accept').data('service-id');
+
+        $.ajax({
+            type:'POST',
+            url: "<?php echo base_url()?>admin/order/accept_order_api",
+            data: {
+                service_id: service_man_id,
+                order_id:ord_id
+            },
+            success:function(data, status){
+                location.reload();
+            },
+            error:function(){
+
+            }
+        });
+    }
+
+    function OnClickRejectButton(){
+        return;
+        ord_id = $('#bt_reject').data('order-id');
+        service_man_id = $('#bt_reject').data('service-id');
+
+        $.ajax({
+            type:'POST',
+            url: "<?php echo base_url()?>admin/order/reject_order_api",
+            data: {
+                service_id: service_man_id,
+                order_id:ord_id
+            },
+            success:function(data, status){
+
+            },
+            error:function(){
+
+            }
+        });
+    }
+
+    function OnClickServedButton(){
+        ord_id = $('#bt_served').data('order-id');
+        service_man_id = $('#bt_served').data('service-id');
+
+        $.ajax({
+            type:'POST',
+            url: "<?php echo base_url()?>admin/order/served_order_api",
+            data: {
+                service_id: service_man_id,
+                order_id:ord_id
+            },
+            success:function(data, status){
+                location.reload();
+            },
+            error:function(){
+
+            }
+        });
+    }
+
+    function OnClickPayoutButton(){
+        ord_id = $('#bt_payout').data('order-id');
+        service_man_id = $('#bt_payout').data('service-id');
+
+        $.ajax({
+            type:'POST',
+            url: "<?php echo base_url()?>admin/order/payout_order_api",
+            data: {
+                service_id: service_man_id,
+                order_id:ord_id
+            },
+            success:function(data, status){
+                location.reload();
+            },
+            error:function(){
+
+            }
+        });
+    }
+
 </script>
 <!-- END JAVASCRIPTS -->
 </body>

@@ -44,7 +44,7 @@
                             </div>
                     </div>
                     <div class="portlet-body form">
-                        <form class="form-horizontal" role="form" method="post" action="<?php echo  base_url();?>admin/order/manage">
+                        <form class="form-horizontal" enctype="multipart/form-data" role="form" method="post" action="<?php echo  base_url();?>admin/order/manage">
                             <div class="form-body">
 
                                 <div class="form-group">
@@ -70,7 +70,7 @@
                                         </div>
                                 </div>
 
-                                <div class="form-group">
+                                <!--<div class="form-group">
                                     <div class="col-sm-2 control-label">GPS location</div>
                                     <div class="col-sm-10">
                                         <div class="input-group">
@@ -80,13 +80,22 @@
                                             <input name="loc_lot" type="text" size="16"  class="form-control" required onkeypress="validate(event)">
                                         </div>
                                     </div>
-                                </div>
+                                </div>-->
 
                                 <div class="form-group">
                                     <div class="col-sm-2 control-label">Delivery Address</div>
                                     <div class="col-sm-10  ">
                                         <div class="input-group col-sm-12">
                                             <input name="client_address" type="text" size="16" class="form-control" required autocomplete="true">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="col-sm-2 control-label">Order Image</div>
+                                    <div class="col-sm-10  ">
+                                        <div class="input-group col-sm-12">
+                                            <input name="image" accept="image/*" type="file" size="16" class="form-control" required autocomplete="true">
                                         </div>
                                     </div>
                                 </div>

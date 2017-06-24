@@ -28,6 +28,18 @@ class Admin extends CI_Controller {
             redirect('admin/login');
         }
 
+        $admin = $this->session->userdata['master'];
+        if($admin->level != 0){
+            $data_header['admin'] = $admin;
+            $data_header['page'] = 'admin_create';
+            $this->load->view('template/headerview', $data_header);
+            $data_left['category'] = -1;
+            $data_left['sub_category'] = -1;
+            $left_view = $this->load->view('template/leftview',$data_left, true);
+            $data['leftview'] = $left_view;
+            $this->load->view('admin/noaccess', $data);
+        }
+
         $this->form_validation->set_rules('username','UserName','required');
         $this->form_validation->set_rules('emailaddress','EmailAddress','required');
         $this->form_validation->set_rules('password','Password','required');
@@ -59,6 +71,18 @@ class Admin extends CI_Controller {
 
         if($this->session->has_userdata('logged_in') == false){
             redirect('admin/login');
+        }
+
+        $admin = $this->session->userdata['master'];
+        if($admin->level != 0){
+            $data_header['admin'] = $admin;
+            $data_header['page'] = 'admin_create';
+            $this->load->view('template/headerview', $data_header);
+            $data_left['category'] = -1;
+            $data_left['sub_category'] = -1;
+            $left_view = $this->load->view('template/leftview',$data_left, true);
+            $data['leftview'] = $left_view;
+            $this->load->view('admin/noaccess', $data);
         }
 
         $this->form_validation->set_rules('username','UserName','required');
@@ -94,8 +118,21 @@ class Admin extends CI_Controller {
         if($this->session->has_userdata('logged_in') == false){
             redirect('admin/login');
         }
-        $this->admin_model->removeAdmin($id);
-        redirect('admin/admin');
+
+        $admin = $this->session->userdata['master'];
+        if($admin->level != 0){
+            $data_header['admin'] = $admin;
+            $data_header['page'] = 'admin_create';
+            $this->load->view('template/headerview', $data_header);
+            $data_left['category'] = -1;
+            $data_left['sub_category'] = -1;
+            $left_view = $this->load->view('template/leftview',$data_left, true);
+            $data['leftview'] = $left_view;
+            $this->load->view('admin/noaccess', $data);
+        }else{
+            $this->admin_model->removeAdmin($id);
+            redirect('admin/admin');
+        }
 
     }
 

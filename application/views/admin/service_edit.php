@@ -57,11 +57,13 @@
                                         <div class="input-group">
                                             <div class="input-icon">
                                                 <i class="fa fa-user fa-fw"></i>
-                                                <input id="username" class="form-control" type="text" name="username" placeholder="username" value="<?php echo $user[0]['user_name'];?>" required>
+                                                <input id="username" class="form-control" type="text" name="username" placeholder="username" value="<?php echo $user[0]['user_name'];?>" required <?php echo ($admin->level != 0)? "disabled": "" ?> >
                                             </div>
+                                            <?php if($admin->level == 0): ?>
                                             <span class="input-group-btn">
 												<button class="btn btn-success red-sunglo" type="submit"><i class="fa fa-arrow-left fa-fw"></i> Update </button>
 												</span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -71,11 +73,13 @@
                                         <div class="input-group">
                                             <div class="input-icon">
                                                 <i class="fa fa-envelope fa-fw"></i>
-                                                <input id="emailaddress" class="form-control" type="text" name="emailaddress" placeholder="Email Address" value="<?php echo $user[0]['user_email'];?>">
+                                                <input id="emailaddress" class="form-control" type="text" name="emailaddress" placeholder="Email Address" value="<?php echo $user[0]['user_email'];?>" <?php echo ($admin->level != 0)? "disabled": "" ?>>
                                             </div>
+                                            <?php if($admin->level == 0): ?>
                                             <span class="input-group-btn">
 												<button class="btn btn-success red-sunglo" type="submit"><i class="fa fa-arrow-left fa-fw"></i> Update </button>
 												</span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
@@ -85,25 +89,27 @@
                                         <div class="input-group">
                                             <div class="input-icon">
                                                 <i class="fa fa-phone fa-fw"></i>
-                                                <input id="userphone" value="<?php echo $user[0]['user_phone'];?>" class="form-control" size="15" maxlength="15" type="text" name="userphone" placeholder="Phone Number:+92-xxx-xxxxxxx" required>
+                                                <input id="userphone" value="<?php echo $user[0]['user_phone'];?>" class="form-control" size="15" maxlength="15" type="text" name="userphone" placeholder="Phone Number:+92-xxx-xxxxxxx" required <?php echo ($admin->level != 0)? "disabled": "" ?>>
 
                                             </div>
+                                            <?php if($admin->level == 0): ?>
                                             <span class="input-group-btn">
 												<button class="btn btn-success red-sunglo" type="submit"><i class="fa fa-arrow-left fa-fw"></i> Update </button>
 												</span>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div class="form-group col-sm-6">
                                     <div class="col-sm-6 pull-right">
-                                        <?php if ($user[0]['verified_phone'] === '0'):?>
+                                        <?php if ($user[0]['verified_phone'] === '0' && $admin->level == 0):?>
                                             <a class="btn blue-madison col-sm-12" href="<?php echo base_url();?>admin/service/verify/2/<?php echo $user[0]['id']?>">Activate phone</a>
                                         <?php endif;?>
                                     </div>
 
                                     <div class="col-sm-6 pull-right">
-                                        <?php if ($user[0]['verified_email'] === '0'):?>
+                                        <?php if ($user[0]['verified_email'] === '0' && $admin->level == 0):?>
                                             <a class="btn blue-madison col-sm-12" href="<?php echo base_url();?>admin/service/verify/1/<?php echo $user[0]['id']?>">Activate email</a>
                                         <?php endif;?>
                                     </div>
@@ -127,7 +133,7 @@
             </div>
             <!-- END USER PROFILE DETAILS-->
 
-
+            <?php if($admin->level == 0): ?>
             <!-- BEGIN PASSWORD CHANGE -->
             <div class="row">
                 <div class="portlet box blue-madison">
@@ -190,6 +196,7 @@
                 </div>
             </div>
             <!-- END PASSWORD CHANGE-->
+            <?php endif; ?>
         </div>
     </div>
     <!-- END CONTENT -->

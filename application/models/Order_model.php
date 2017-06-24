@@ -19,11 +19,12 @@ class Order_model extends CI_Model
         $data = array(
                         'client_id' => $client_id,
                         'service_id' => 0,
-                        'request_time'=>$request_time,
+                        'request_time'=> $request_time,
                         'status' => 0,
                         'ord_address' => $ord_address,
                         'attach_file' => $attach_file
                         );
+        $this->db->set('request_time', 'NOW()', false);
         $this->db->set('created_at', 'NOW()', FALSE);
         $this->db->set('updated_at', 'NOW()', FALSE);
         $this->db->insert('tb_order', $data);
@@ -33,10 +34,62 @@ class Order_model extends CI_Model
     /**
      * ASSIGN ORDER TO SERVICE MAN
      */
+
+    public function markOrderInProcessing($order_id){
+        $data = array(
+            'status' => 1
+        );
+        $this->db->set('updated_at','NOW()', FALSE);
+        $this->db->where('id',$order_id);
+        $this->db->update('tb_order', $data);
+    }
+
+    public function acceptOrder($order_id, $service_id){
+        $data = array(
+            'service_id' => $service_id,
+            'status' => 3
+        );
+        $this->db->set('updated_at','NOW()', FALSE);
+        $this->db->where('id',$order_id);
+        $this->db->update('tb_order', $data);
+    }
+
+    public function cancelOrder($order_id){
+        $data = array(
+            'service_id' => '',
+            'status' => 7
+        );
+        $this->db->set('updated_at','NOW()', FALSE);
+        $this->db->where('id',$order_id);
+        $this->db->update('tb_order', $data);
+    }
+
+    public function serveOrder($order_id, $service_id){
+        $data = array(
+            'service_id' => $service_id,
+            'status' => 4
+        );
+        $this->db->set('updated_at','NOW()', FALSE);
+        $this->db->where('id',$order_id);
+        $this->db->update('tb_order', $data);
+    }
+
+
+
     public function assignOrder($order_id, $service_id){
         $data = array(
             'service_id' => $service_id,
             'status' => 2
+        );
+        $this->db->set('updated_at','NOW()', FALSE);
+        $this->db->where('id',$order_id);
+        $this->db->update('tb_order', $data);
+    }
+
+    public function payOrder($order_id, $service_id){
+        $data = array(
+            'service_id' => $service_id,
+            'status' => 6
         );
         $this->db->set('updated_at','NOW()', FALSE);
         $this->db->where('id',$order_id);
@@ -83,14 +136,13 @@ class Order_model extends CI_Model
     /**
      * UPDATE ORDER CONTENT
      */
-    public function updateOrderContent($id, $client_id,$service_id, $request_time, $status,  $ord_address, $estimation_arrival){
+    public function updateOrderContent($id, $client_id,$service_id, $estimation_arrival, $status,  $ord_address){
         $data = array(
             'client_id' => $client_id,
             'service_id' => $service_id,
-            'request_time'=>$request_time,
+            'estimation_arrival'=> $estimation_arrival,
             'status' => $status,
             'ord_address' => $ord_address,
-            'estimation_arrival' => $estimation_arrival
         );
         $this->db->set('updated_at','NOW()', FALSE);
         $this->db->where('id', $id);
@@ -123,8 +175,14 @@ class Order_model extends CI_Model
     /***
      * GET ORDER LIST FOR SERVICE MAN
      */
-    public function getOrderList_Service($service_id, $status, $count){
-        $query = "SELECT * FROM tb_order WHERE service_id='".$service_id."' AND status = '".$status."' ORDER BY id DESC";
+    public function getOrderList_Service($service_id, $status = '', $count){
+        $query = "SELECT * FROM tb_order WHERE service_id='".$service_id."'";
+        if($status != ''){
+            $query .= "AND status = '".$status."'";
+        }else{
+            $query .= "AND status < 5 ";
+        }
+        $query .= "  ORDER BY id DESC";
         if($count > 0)
             $query .= " LIMIT ".$count;
         $result = $this->db->query($query);
@@ -166,6 +224,12 @@ class Order_model extends CI_Model
      */
     public function getCurrentWorkingJob($service_id){
         $query = "SELECT * FROM tb_order WHERE status > '2' AND status < '6' AND service_id = '".$service_id."'";
+        $result = $this->db->query($query);
+        return $result->result_array();
+    }
+
+    public function getLocation($id){
+        $query = "SELECT * FROM tb_order WHERE service_id = '".$id."' ORDER BY id DESC LIMIT 1";
         $result = $this->db->query($query);
         return $result->result_array();
     }

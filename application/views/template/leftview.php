@@ -69,13 +69,33 @@
                     </li>
 
                     <li <?php if($category == 2 && $sub_category == 2) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/order/show_processed">
+                            Processed</a>
+                    </li>
+
+                    <li <?php if($category == 2 && $sub_category == 3) echo 'class="active"';?>>
                         <a href="<?php echo base_url();?>admin/order/show_accept">
                             Accepted</a>
                     </li>
 
-                    <li <?php if($category == 2 && $sub_category == 3) echo 'class="active"';?>>
+                    <li <?php if($category == 2 && $sub_category == 4) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/order/show_served">
+                            Served</a>
+                    </li>
+
+                    <li <?php if($category == 2 && $sub_category == 5) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/order/show_paid">
+                            Paid</a>
+                    </li>
+
+                    <li <?php if($category == 2 && $sub_category == 6) echo 'class="active"';?>>
                         <a href="<?php echo base_url();?>admin/order/complete">
                             Completed</a>
+                    </li>
+
+                    <li <?php if($category == 2 && $sub_category == 7) echo 'class="active"';?>>
+                        <a href="<?php echo base_url();?>admin/order/show_cancelled">
+                            Cancelled</a>
                     </li>
                 </ul>
 

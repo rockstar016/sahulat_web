@@ -89,7 +89,7 @@
                                         <div class="input-group col-sm-12">
                                             <div class="input-icon">
                                                 <i class="fa fa-phone fa-fw"></i>
-                                                <input id="userphone" class="form-control" type="text" name="userphone" placeholder="Phone Number" required>
+                                                <input id="userphone" class="form-control" type="text" maxlength="15" size="15" name="userphone" value="+92-" placeholder="Phone Number" required>
                                             </div>
                                         </div>
                                     </div>
@@ -153,6 +153,25 @@
         Metronic.init(); // init metronic core componets
         Layout.init(); // init layout
         QuickSidebar.init(); // init quick sidebar
+
+    });
+
+    $("#userphone").on('keydown',function(){
+        var key = event.keyCode || event.charCode;
+        if( key == 8 || key == 46 ){
+            if($("#userphone").val().length == 4){
+                return false;
+            }
+            return true;
+        }
+        if(!(key >= 48 && key <=57)){
+            return false;
+        }
+        if($("#userphone").val().length == 7){
+            var current_value = $("#userphone").val();
+            current_value = current_value + "-";
+            $("#userphone").val(current_value);
+        }
 
     });
     

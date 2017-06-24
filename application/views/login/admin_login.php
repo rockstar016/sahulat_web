@@ -51,7 +51,6 @@
 <div class="content">
 	<!-- BEGIN LOGIN FORM -->
 	<form class="login-form" action="<?php echo base_url()?>admin/login" method="post">
-
         <?php if ($error == 1):?>
             <div class="alert alert-danger">
                 <button class="close" data-close="alert"></button>
@@ -63,13 +62,13 @@
         <div class="alert alert-danger display-hide">
 			<button class="close" data-close="alert"></button>
 			<span>
-			Enter admin name and password. </span>
+			Enter admin name and password.</span>
 		</div>
 		<div class="form-group">
 			<label class="control-label visible-ie8 visible-ie9">Username</label>
 			<div class="input-icon" style="margin-top: 25px;">
 				<i class="fa fa-user"></i>
-				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="mastername"/>
+				<input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="Username" name="mastername" value=""/>
 			</div>
 		</div>
 		<div class="form-group">

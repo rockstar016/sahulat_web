@@ -78,6 +78,12 @@
                                     Duration
                                 </th>
                                 <th>
+                                    Image
+                                </th>
+                                <th>
+
+                                </th>
+                                <th>
 
                                 </th>
                                 <th>
@@ -86,6 +92,10 @@
                                 <th>
 
                                 </th>
+                                <th>
+
+                                </th>
+
 
                             </tr>
                             </thead>
@@ -177,6 +187,9 @@
                     "orderable": false
                 },
                 {
+                    "orderable": false
+                },
+                {
                     "orderable": false,
                     "visible":false
                 }
@@ -184,15 +197,21 @@
             ,
             "columnDefs": [
                 {
-                "targets": [7],
+                "targets": [8],
                 "data": [null, undefined],
                 "defaultContent": ['<button  class="btn btn-small green-jungle" id="edit_btn" type="button">Edit</button>']
                 }
                 ,
                 {
-                    "targets": [8],
+                    "targets": [9],
                     "data": [ undefined],
-                    "defaultContent": ['<button class="btn btn-small red-sunglo" id="assign_btn" type="button">Assign</button>']
+                    "defaultContent": ['<button class="btn btn-small red-sunglo" id="assign_btn" type="button">Check</button>']
+                }
+                ,
+                {
+                    "targets": [10],
+                    "data": [ undefined],
+                    "defaultContent": ['<button class="btn btn-small red-sunglo" id="cancel_btn" type="button"> Cancel Order</button>']
                 }
             ]
         } );
@@ -202,15 +221,31 @@
             if(this.id == "edit_btn")
             {
                 var data = table.api().row($(this).parents('tr')).data();
-                window.location.assign("<?php echo base_url();?>admin/order/edit_order/"+data[ 6 ]);
+                window.location.assign("<?php echo base_url();?>admin/order/edit_order/"+data[ 7 ]);
 
             }
             if(this.id == "assign_btn")
             {
                 var data = table.api().row($(this).parents('tr')).data();
-                window.location.assign("<?php echo base_url();?>admin/order/assign_order/"+data[ 6 ]);
+                window.location.assign("<?php echo base_url();?>admin/order/assign_order/"+data[ 7 ]);
 
             }
+
+            if(this.id == "cancel_btn")
+            {
+                var data = table.api().row($(this).parents('tr')).data();
+                window.location.assign("<?php echo base_url();?>admin/order/cancel_order/"+data[ 7 ]);
+
+            }
+
+            if(this.id == "viewImage_btn")
+            {
+                var data = table.api().row($(this).parents('tr')).data();
+                window.location.assign("<?php echo base_url();?>"+data[ 8 ]);
+
+            }
+
+
 
         } );
         ajaxpost();
@@ -237,6 +272,13 @@
                         if( typeof(data.service[0])!= 'undefined'){
                             serviceman =  data.service[0]['user_name']+"("+data.service[0]['user_phone']+")";
                         }
+                        var view_image = "";
+                        if($.trim(data.attach_file)){
+                            view_image = '<button  class="btn btn-small green-jungle" id="viewImage_btn" type="button">View Image</button>';
+                        }
+                        else{
+                            view_image = 'no-image';
+                        }
                         //!!!--Here is the main catch------>fnAddData
                         table.fnAddData( [
                                 no,
@@ -244,8 +286,10 @@
                                 serviceman,
                                 data.created_at,
                                 data.updated_at,
-                                data.order_date,
+                                data.request_time,
+                                view_image,
                                 data.id,
+                                data.attach_file,
 
                             ]
                         );
