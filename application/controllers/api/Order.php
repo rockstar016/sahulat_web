@@ -280,7 +280,7 @@ class Order extends \Restserver\Libraries\REST_Controller
                  * I will complete this part of implementation
                  * after getting everything is sort out about
                  * gateway....
-                 * 
+                 *
                  * */
                 $payment_handler = new EasyPayPayments();
                 print_r($payment_handler->openAPICreditCard($amount, $order_id, $user_data['user_data'], $card_token));
